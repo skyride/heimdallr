@@ -38,6 +38,8 @@ def search(params):
         "killmail.victim.corporation": True,
         "killmail.victim.character": True,
         "killmail.victim.shipType": True,
+        "killmail.victim.damageTaken": True,
+        "zkb.totalValue": True,
     }
 
     # Decode the search params
@@ -48,11 +50,39 @@ def search(params):
 
     # victimCharacter
     if "victimCharacter" in params:
-        search['killmail.victim.character.id'] = params['victimCharacter']
+        search['killmail.victim.character.id'] = {"$in": list(params['victimCharacter'])}
+
+    # victimCorporation
+    if "victimCorporation" in params:
+        search['killmail.victim.corporation.id'] = {"$in": list(params['victimCorporation'])}
+
+    # victimAlliance
+    if "victimAlliance" in params:
+        search['killmail.victim.alliance.id'] = {"$in": list(params['victimAlliance'])}
+
+    # attackerCharacter
+    if "attackerCharacter" in params:
+        search['killmail.attackers.character.id'] = {"$in": list(params['attackerCharacter'])}
+
+    # attackerCorporation
+    if "attackerCorporation" in params:
+        search['killmail.attackers.corporation.id'] = {"$in": list(params['attackerCorporation'])}
+
+    # attackerAlliance
+    if "attackerAlliance" in params:
+        search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
+
+    # solarSystem
+    if "solarSystem" in params:
+        search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
+
+    # carrying
+    if "carrying" in params:
+        search['killmail.victim.items.itemType.id'] = {"$in": list(params['carrying'])}
 
 
-    # Perform search and return result
-    r = db.kills.find(search, projection=projection, limit=50)
+    # Perform search and return result if there are any kills provided
+    r = db.kills.find(search, projection=projection, limit=50, sort=[("killmail.killTime", -1)])
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 

@@ -11,6 +11,21 @@ while 1 > 0:
     #print data
     if data != None:
         try:
+            # Add constellation and region
+            system = json.loads(requests.get(url=data['killmail']['solarSystem']['href']).text)
+            constellation = json.loads(requests.get(url=system['constellation']['href']).text)
+            region = json.loads(requests.get(url=constellation['region']['href']).text)
+
+            data['killmail']['constellation'] = {
+                "id": system['constellation']['id'],
+                "name": constellation['name'],
+            }
+
+            data['killmail']['region'] = {
+                "id": region['id'],
+                "name": region['name'],
+            }
+
             id = kills.insert_one(data).inserted_id
             try:
                 print "[%s]: %s (%s) %s's %s" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'], data['killmail']['victim']['corporation']['name'], data['killmail']['victim']['shipType']['name'])
