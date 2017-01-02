@@ -33,3 +33,5 @@ while 1 > 0:
                 print "[%s]: %s (%s) Non-ship mail" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'])
         except errors.DuplicateKeyError:
             print "DuplicateKeyError for KillID: %s" % data['killID']
+        except KeyError:
+            print dumps(data)
