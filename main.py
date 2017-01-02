@@ -46,7 +46,7 @@ def search(params):
     try:
         params = loads(params)
     except ValueError:
-        return Response("[]", status=500, mimetype="application/json")
+        return Response("[]", status=400, mimetype="application/json")
 
     # victimCharacter
     if "victimCharacter" in params:
@@ -72,13 +72,34 @@ def search(params):
     if "attackerAlliance" in params:
         search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
 
-    # solarSystem
-    if "solarSystem" in params:
-        search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
+    # victimShipType
+    if "victimShipType" in params:
+        search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
 
     # carrying
     if "carrying" in params:
         search['killmail.victim.items.itemType.id'] = {"$in": list(params['carrying'])}
+
+    # solarSystem
+    if "solarSystem" in params:
+        search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
+
+    # constellation
+    if "constellation" in params:
+        search['killmail.constellation.id'] = {"$in": list(params['constellation'])}
+
+    # region
+    if "region" in params:
+        search['killmail.region.id'] = {"$in": list(params['region'])}
+
+    # minimumValue
+    if "minimumValue" in params:
+        search['zkb.totalValue'] = {"$gte": params['minimumValue']}
+
+
+    # Check we've generated search parameters before wasting the database's time
+    if search == {}:
+        return Response("[]", status=400, mimetype="application/json")
 
 
     # Perform search and return result if there are any kills provided
