@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 from pymongo import MongoClient, errors
 from bson.json_util import loads, dumps
 
@@ -6,8 +6,8 @@ app = Flask(__name__)
 db = MongoClient().heimdallr
 
 @app.route("/")
-def hello():
-    return "Hello World!"
+def main():
+    return render_template('main.html')
 
 
 
