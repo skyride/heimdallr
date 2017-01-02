@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, Response
 from pymongo import MongoClient, errors
 from bson.json_util import loads, dumps
 
@@ -11,8 +11,8 @@ def hello():
 @app.route("/kill/<int:killID>")
 def kill(killID):
     kills = MongoClient().heimdallr.kills
-    kill = kills.find_one({"killID": killID})
-    return jsonify(kill)
+    kill = kills.find_one({"killID": killID}, projection={"_id": False})
+    return Response(response=dumps(kill), status=200, mimetype="application/json")
 
 if __name__ == "__main__":
     app.run(debug=True)

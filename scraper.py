@@ -4,10 +4,6 @@ import json, requests, datetime
 client = MongoClient()
 kills = client.heimdallr.kills
 
-#post = {"a": 1}
-#id = kills.insert_one(post).inserted_id
-#print id
-
 # Perform request and save it if it isn't null
 url = "https://redisq.zkillboard.com/listen.php"
 while 1 > 0:
