@@ -17,6 +17,8 @@ while 1 > 0:
             constellation = json.loads(requests.get(url=system['constellation']['href']).text)
             region = json.loads(requests.get(url=constellation['region']['href']).text)
 
+            data['killmail']['solarSystem']['securityStatus'] = system['securityStatus']
+
             data['killmail']['constellation'] = {
                 "id": system['constellation']['id'],
                 "name": constellation['name'],

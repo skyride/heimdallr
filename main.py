@@ -7,7 +7,7 @@ db = MongoClient().heimdallr
 
 @app.route("/")
 def main():
-    return render_template('main.html')
+    return app.send_static_file('main.html')
 
 
 
