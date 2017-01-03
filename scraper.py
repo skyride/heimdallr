@@ -29,6 +29,11 @@ while 1 > 0:
                 "name": region['name'],
             }
 
+            # Put the final blow attacker as its own thing on the killmail
+            for attacker in data['killmail']['attackers']:
+                if attacker['finalBlow'] == True:
+                    data['killmail']['finalBlow'] = attacker
+
             id = kills.insert_one(data).inserted_id
             try:
                 print "[%s]: %s (%s) %s's %s" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'], data['killmail']['victim']['corporation']['name'], data['killmail']['victim']['shipType']['name'])
