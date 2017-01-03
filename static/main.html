@@ -34,12 +34,12 @@
         <table class="table table-striped kill-container">
           <tr ng-repeat="k in kms">
               <td class="lefttd"><div class="leftblock"></div></td>
-              <td><p class="leftp">02:30<br /><a href="#">{{iskFormat(k.zkb.totalValue)}}</a></p></td>
-              <td><a href="#"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a></td>
-              <td><p>{{k.killmail.solarSystem.name}} <span class="sec-0-0">-0.1</span><br />Catch</p>
-              <td><img class="kill-img" src="https://imageserver.eveonline.com/Alliance/1354830081_64.png"></td>
-              <td><p>Capri Sun KraftFoods (Machariel)<br />KarmaFleet / Goonswarm Federation</p></td>
-              <td><img class="kill-img" src="https://imageserver.eveonline.com/Alliance/1727758877_64.png"></td>
+              <td><p class="leftp">02:30<br /><a href="https://zkillboard.com/kill/{{k.killID}}/">{{iskFormat(k.zkb.totalValue)}}</a></p></td>
+              <td><a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a></td>
+              <td><p>{{k.killmail.solarSystem.name}} <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span><br />{{k.killmail.region.name}}</p>
+              <td><img class="kill-img" src="{{victimIcon(k)}}"></td>
+              <td><p>{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br />{{victimGuild(k)}}</p></td>
+              <td><img class="kill-img" src="{{finalBlowIcon(k)}}"></td>
               <td><p>Sosi Midragi (4)<br />hirr / Northern Coalition.</p></td>
           </tr>
         </table>

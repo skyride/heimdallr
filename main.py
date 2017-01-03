@@ -33,6 +33,7 @@ def search(params):
         "killID": True,
         "killmail.killTime": True,
         "killmail.solarSystem": True,
+        "killmail.region": True,
         "killmail.attackerCount": True,
         "killmail.victim.alliance": True,
         "killmail.victim.corporation": True,
@@ -40,6 +41,9 @@ def search(params):
         "killmail.victim.shipType": True,
         "killmail.victim.damageTaken": True,
         "zkb.totalValue": True,
+        "killmail.attackers": {
+            "$slice": 1,
+        },
     }
 
     # Decode the search params
