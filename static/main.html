@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 
     <link rel="stylesheet" href="/static/main.css">
@@ -32,16 +33,16 @@
 
       <div ng-controller="KillListController" class="row">
         <table class="table table-striped kill-container">
-          <tr ng-repeat="k in kms">
-              <td class="lefttd"><div class="leftblock"></div></td>
-              <td><p class="leftp">02:30<br /><a href="https://zkillboard.com/kill/{{k.killID}}/">{{iskFormat(k.zkb.totalValue)}}</a></p></td>
-              <td><a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a></td>
-              <td><p>{{k.killmail.solarSystem.name}} <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span><br />{{k.killmail.region.name}}</p>
-              <td><img class="kill-img" src="{{victimIcon(k)}}"></td>
-              <td><p>{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br />{{victimGuild(k)}}</p></td>
-              <td><img class="kill-img" src="{{finalBlowIcon(k)}}"></td>
-              <td><p>Sosi Midragi (4)<br />hirr / Northern Coalition.</p></td>
-          </tr>
+            <tr class="kill" ng-repeat="k in kms | orderBy: '-killmail.killTime' | limitTo: 50">
+                <td class="lefttd"><div class="leftblock"></div></td>
+                <td><div><p>{{k.killmail.killTime | date:"HH:mm"}}<br /><a href="https://zkillboard.com/kill/{{k.killID}}/">{{iskFormat(k.zkb.totalValue)}}</a><br />{{k.killmail.killTime | date:"dd/MM/yy" }}</p></div></td>
+                <td><div><a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a></div></td>
+                <td><div><p class="systemp">{{k.killmail.solarSystem.name}} <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span><br />{{k.killmail.region.name}}</div></p>
+                <td><div><img class="kill-img" src="{{victimIcon(k)}}"></div></td>
+                <td><div><p>{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br />{{victimGuild(k)}}</p></div></td>
+                <td><div><img class="kill-img" src="{{finalBlowIcon(k)}}"></div></td>
+                <td><div><p>{{finalBlowName(k)}} ({{k.killmail.attackerCount}})<br />{{finalBlowGuild(k)}}</p></div></td>
+            </tr>
         </table>
       </div>
     </div>

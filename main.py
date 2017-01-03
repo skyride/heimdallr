@@ -1,3 +1,4 @@
+import sys, os
 from flask import Flask, Response, render_template
 from pymongo import MongoClient, errors
 from bson.json_util import loads, dumps
@@ -29,7 +30,7 @@ def search(params):
     # Starting values
     search = {}
     projection = {
-        "_id": False,
+        "_id": True,
         "killID": True,
         "killmail.killTime": True,
         "killmail.solarSystem": True,
@@ -40,10 +41,8 @@ def search(params):
         "killmail.victim.character": True,
         "killmail.victim.shipType": True,
         "killmail.victim.damageTaken": True,
+        "killmail.finalBlow": True,
         "zkb.totalValue": True,
-        "killmail.attackers": {
-            "$slice": 1,
-        },
     }
 
     # Decode the search params
@@ -105,9 +104,16 @@ def search(params):
     if search == {}:
         return Response("[]", status=400, mimetype="application/json")
 
+    # Make sort order based on the existence of last mail received
+    if "lastObj" in params:
+        #sort = [("_id", -1)]
+        sort = [("killmail.killTime", -1)]
+    else:
+        sort = [("killmail.killTime", -1)]
+
 
     # Perform search and return result if there are any kills provided
-    r = db.kills.find(search, projection=projection, limit=50, sort=[("killmail.killTime", -1)])
+    r = db.kills.find(search, projection=projection, limit=50, sort=sort)
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 
