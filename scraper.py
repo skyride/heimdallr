@@ -1,4 +1,5 @@
 from pymongo import MongoClient, errors
+import traceback
 import json, requests, datetime
 from bson.json_util import loads, dumps
 
@@ -43,3 +44,4 @@ while 1 > 0:
             print "DuplicateKeyError for KillID: %s" % data['killID']
         except KeyError:
             print dumps(data)
+            traceback.print_exc()

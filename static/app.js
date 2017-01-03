@@ -4,7 +4,7 @@ var heimdallrApp = angular.module('heimdallrApp', ['ngAnimate']);
 // Define the KillListController
 heimdallrApp.controller('KillListController', function KillListController($scope, $http, $interval) {
   $scope.kms = []
-  $scope.params = {'minimumValue': 5}
+  $scope.params = {'region': [10000035]}
 
   var getData = function() {
     $http.get("/search/"+JSON.stringify($scope.params))
