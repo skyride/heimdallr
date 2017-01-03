@@ -14,7 +14,7 @@ while 1 > 0:
     if data != None:
         try:
             # Add constellation and region
-            system = json.loads(requests.get(url=data['killmail']['solarSystem']['href']).text)
+            system = json.loads(requests.get(url="https://crest-tq.eveonline.com/solarsystems/%s/" % data['killmail']['solarSystem']['id']))
             constellation = json.loads(requests.get(url=system['constellation']['href']).text)
             region = json.loads(requests.get(url=constellation['region']['href']).text)
 
