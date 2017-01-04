@@ -51,51 +51,63 @@ def search(params):
 
     # victimCharacter
     if "victimCharacter" in params:
-        search['killmail.victim.character.id'] = {"$in": list(params['victimCharacter'])}
+        if len(params['victimCharacter']) > 0:
+            search['killmail.victim.character.id'] = {"$in": list(params['victimCharacter'])}
 
     # victimCorporation
     if "victimCorporation" in params:
-        search['killmail.victim.corporation.id'] = {"$in": list(params['victimCorporation'])}
+        if len(params['victimCorporation']) > 0:
+            search['killmail.victim.corporation.id'] = {"$in": list(params['victimCorporation'])}
 
     # victimAlliance
     if "victimAlliance" in params:
-        search['killmail.victim.alliance.id'] = {"$in": list(params['victimAlliance'])}
+        if len(params['victimAlliance']) > 0:
+            search['killmail.victim.alliance.id'] = {"$in": list(params['victimAlliance'])}
 
     # attackerCharacter
     if "attackerCharacter" in params:
-        search['killmail.attackers.character.id'] = {"$in": list(params['attackerCharacter'])}
+        if len(params['attackerCharacter']) > 0:
+            search['killmail.attackers.character.id'] = {"$in": list(params['attackerCharacter'])}
 
     # attackerCorporation
     if "attackerCorporation" in params:
-        search['killmail.attackers.corporation.id'] = {"$in": list(params['attackerCorporation'])}
+        if len(params['attackerCorporation']) > 0:
+            search['killmail.attackers.corporation.id'] = {"$in": list(params['attackerCorporation'])}
 
     # attackerAlliance
     if "attackerAlliance" in params:
-        search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
+        if len(params['attackerAlliance']) > 0:
+            search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
 
     # victimShipType
     if "victimShipType" in params:
-        search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
+        if len(params['victimShipType']) > 0:
+            search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
 
     # carrying
     if "carrying" in params:
-        search['killmail.victim.items.itemType.id'] = {"$in": list(params['carrying'])}
+        if len(params['carrying']) > 0:
+            search['killmail.victim.items.itemType.id'] = {"$in": list(params['carrying'])}
 
     # solarSystem
     if "solarSystem" in params:
-        search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
+        if len(params['solarSystem']) > 0:
+            search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
 
     # constellation
     if "constellation" in params:
-        search['killmail.constellation.id'] = {"$in": list(params['constellation'])}
+        if len(params['constellation']) > 0:
+            search['killmail.constellation.id'] = {"$in": list(params['constellation'])}
 
     # region
     if "region" in params:
-        search['killmail.region.id'] = {"$in": list(params['region'])}
+        if len(params['region']) > 0:
+            search['killmail.region.id'] = {"$in": list(params['region'])}
 
     # minimumValue
     if "minimumValue" in params:
-        search['zkb.totalValue'] = {"$gte": params['minimumValue']}
+        if params['minimumValue'] != None:
+            search['zkb.totalValue'] = {"$gte": params['minimumValue']}
 
 
     # Check we've generated search parameters before wasting the database's time

@@ -16,7 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-touch.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap-tpls.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 
     <!-- Custom -->
@@ -28,6 +28,15 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
+  <!-- Alliance TypeAhead templates -->
+  <script type="text/ng-template" id="allianceTypeaheadResult.html">
+    <a>
+        <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Alliance/{{match.model.id}}_32.png">
+        <span>{{match.model.name}}</span>
+    </a>
+  </script>
+
 
   <body>
     <!-- Static navbar -->
@@ -46,9 +55,6 @@
           <ul class="nav navbar-nav">
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/">Default</a></li>
-            <li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>
-            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -86,14 +92,25 @@
                     <li>
                       <form class="navbar-form">
                         <div class="form-group">
-                          <input type="text" class="form-control" placeholder="Search">
+                          <input type="text" class="form-control" ng-model="victimAllianceSearch" placeholder="Search"
+                            uib-typeahead="search as search.name for search in autoCompleteAlliance($viewValue) | limitTo: 20"
+                            typeahead-template-url="allianceTypeaheadResult.html"
+                            typeahead-on-select="addVictimAlliance($item); victimAllianceSearch = null" typeahead-min-length="3">
                         </div>
                       </form>
                     </li>
+                    <li>
+                      <ul class="filter-list">
+                        <li ng-click="removeVictimAlliance(item)" ng-repeat="item in params.victimAlliance">
+                            <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Alliance/{{item.id}}_32.png" />
+                            {{item.name}}
+                            <span class="pull-right">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                        </li>
+                      </ul>
+                    </li>
 
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                   </ul>
@@ -102,17 +119,7 @@
 
               <!-- Filter Right -->
               <ul class="nav navbar-nav navbar-right">
-                <!--<li><a href="#">Link</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
-                </li>-->
+                <li><a href="" ng-click="resetFilters()">Reset</a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -139,7 +146,7 @@
 
                 <!-- Ship Icon -->
                 <td><div>
-                  <a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a>
+                  <a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" ng-src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a>
                 </div></td>
 
                 <!-- System and Region info -->
@@ -153,7 +160,7 @@
 
                 <!-- Victim icon -->
                 <td><div>
-                  <img class="kill-img" src="{{victimIcon(k)}}">
+                  <img class="kill-img" ng-src="{{victimIcon(k)}}">
                 </div></td>
 
                 <!-- Victim info -->
@@ -166,7 +173,7 @@
 
                 <!-- Final Blow icon -->
                 <td><div>
-                  <img class="kill-img" src="{{finalBlowIcon(k)}}">
+                  <img class="kill-img" ng-src="{{finalBlowIcon(k)}}">
                 </div></td>
 
                 <!-- Final Blow info -->

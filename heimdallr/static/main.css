@@ -3,6 +3,49 @@
   padding: 0;
 }
 
+/* Filter */
+.dropdown-icon {
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.dropdown-menu input.form-control {
+  min-width: 250px;
+}
+
+.filter-list img {
+  width: 24px;
+  height: 24px;
+}
+
+ul.filter-list {
+  padding: 3px 20px;
+  list-style-type: none;
+
+}
+
+ul.filter-list li {
+  margin-top: 2px;
+  padding: 6px;
+  border-radius: 4px;
+  background-color: #eee;
+  width: 100%;
+}
+ul.filter-list li {
+  line-height: 24px;
+}
+ul.filter-list li:hover {
+  text-decoration: none;
+}
+
+ul.filter-list li span.glyphicon {
+  margin-left: 2px;
+  margin-top: -5px;
+  vertical-align: middle;
+}
+
+
+/* Kills */
 tr.ng-enter {
     opacity: 0;
     transition: all 0.8s ease;
@@ -49,8 +92,6 @@ table.kill-container tbody tr td {
 }
 
 .kill-img {
-  /*width: 64px;
-  height: 64px;*/
   background-color: #ddd;
   border-radius: 4px;
 }

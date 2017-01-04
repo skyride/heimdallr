@@ -1,13 +1,42 @@
 // Define the heimdallr module
 var heimdallrApp = angular.module('heimdallrApp', ['ngAnimate', 'ui.bootstrap']);
 
+function mapID(arr) {
+  return arr.map(function(item) {
+    return item.id;
+  });
+}
+
 // Define the KillsController
 heimdallrApp.controller('KillsController', function KillsController($scope, $http, $interval) {
-  $scope.kms = []
-  $scope.params = {}
+  $scope.kms = [];
+  $scope.params = {
+    "victimCharacter": [],
+    "victimCorporation": [],
+    "victimAlliance": [],
+    "attackerCharacter": [],
+    "attackerCorporation": [],
+    "attackerAlliance": [],
+    "victimShipType": [],
+    "carrying": [],
+    "solarSystem": [],
+    "constellation": [],
+    "region": [],
+    "minimumValue": null
+  };
+  $scope.baseParams = JSON.parse(JSON.stringify($scope.params));
 
   var getData = function() {
-    $http.get("/search/"+JSON.stringify($scope.params))
+    // Prune the param object from objects to ids
+    params = JSON.parse(JSON.stringify($scope.params));
+    for(var key in params) {
+      if(key != "minimumValue") {
+        params[key] = mapID(params[key]);
+      }
+    }
+    console.log(params);
+
+    $http.get("/search/"+JSON.stringify(params))
     .then(function(response) {
       //$scope.kms = response.data;
       //Iterate through the response data and add them if they're new
@@ -38,20 +67,46 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   }, 3000);
 
 
-  /*var refreshData = function() {
-    $http.get("/search/%7B%22minimumValue%22:500000000%7D")
+  // Autocomplete Feeds
+  $scope.autoCompleteAlliance = function(search) {
+    return $http.get("/autocomplete/alliance/"+search)
     .then(function(response) {
-      $scope.kms = response.data;
-      $timeout(refreshData, 500);
+      return response.data;
     });
+  };
+
+
+
+  // Manipulate Filters
+  $scope.addVictimAlliance = function(item) {
+    if(!(item.id in mapID($scope.params['victimAlliance']))) {
+      $scope.params['victimAlliance'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeVictimAlliance = function(item) {
+    if(item.id in mapID($scope.params['victimAlliance'])) {
+      index = mapID($scope.params['victimAlliance']).indexOf(id);
+      $scope.params['victimAlliance'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
   }
-  var promise = $timeout(refreshData, 500);*/
+
+  $scope.resetFilters = function() {
+    if(JSON.stringify($scope.params) !== JSON.stringify($scope.baseParams)) {
+      $scope.params = JSON.parse(JSON.stringify($scope.baseParams));
+      $scope.kms = [];
+      getData();
+    }
+  };
 
 
   // Display functions
   $scope.iskFormat = function(isk) {
     return numeral(isk).format('0,0.00a');
-  }
+  };
 
   $scope.sysSecStatus = function(sec) {
     if(sec > 0 && sec <= 0.05) {
@@ -59,7 +114,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     } else {
       return numeral(sec).format('0.0');
     }
-  }
+  };
 
   $scope.sysSecClass = function(sec) {
     if(sec > 0 && sec <= 0.05) {
@@ -72,7 +127,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
         return "sec-" + numeral(sec).format('0.0').replace(".", "-");
       }
     }
-  }
+  };
 
   $scope.victimIcon = function(k) {
     // Check if we have an alliance, otherwise just use the corporation
@@ -81,7 +136,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     } else {
       return "https://imageserver.eveonline.com/Corporation/"+k.killmail.victim.corporation.id+"_64.png";
     }
-  }
+  };
 
   $scope.victimName = function(k) {
     // Check if we have a character, otherwise just the corporation
@@ -90,7 +145,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     } else {
       return k.killmail.victim.corporation.name;
     }
-  }
+  };
 
   $scope.victimGuild = function(k) {
     r = k.killmail.victim.corporation.name;
@@ -98,7 +153,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       r = r + " / " + k.killmail.victim.alliance.name;
     }
     return r;
-  }
+  };
 
   $scope.finalBlowIcon = function(k) {
     // Check if we have an alliance otherwise, just use the corporation
@@ -109,7 +164,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     } else {
       return "/static/img/eve-question.png"
     }
-  }
+  };
 
   $scope.finalBlowName = function(k) {
     // Check if we have a character, otherwise just the corporation
@@ -120,7 +175,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     } else {
       return "?"
     }
-  }
+  };
 
   $scope.finalBlowGuild = function(k) {
     r = ""
@@ -134,5 +189,5 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       r = "?"
     }
     return r;
-  }
+  };
 });
