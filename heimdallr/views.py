@@ -3,13 +3,13 @@ from flask import Flask, Response, render_template
 from pymongo import MongoClient, errors
 from bson.json_util import loads, dumps
 
-app = Flask(__name__)
+from heimdallr import app
+
 db = MongoClient().heimdallr
 
 @app.route("/")
 def main():
     return app.send_static_file('main.html')
-
 
 
 # Returns the full kill object
@@ -115,8 +115,3 @@ def search(params):
     # Perform search and return result if there are any kills provided
     r = db.kills.find(search, projection=projection, limit=50, sort=sort)
     return Response(response=dumps(r), status=200, mimetype="application/json")
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
