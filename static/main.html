@@ -9,7 +9,7 @@
 
     <!-- Bootstrap, jQuery and Angular -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" integrity="sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
@@ -26,22 +26,86 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="row">
-        <h1>Heimdallr</h1>
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Heimdallr</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../navbar/">Default</a></li>
+            <li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>
+            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
+    </nav>
+
+    <div class="container">
 
       <div ng-controller="KillListController" class="row">
         <table class="table table-striped kill-container">
             <tr class="kill" ng-repeat="k in kms | orderBy: '-killmail.killTime' | limitTo: 50">
+                <!-- Left Block-->
                 <td class="lefttd"><div class="leftblock"></div></td>
-                <td><div><p>{{k.killmail.killTime | date:"HH:mm"}}<br /><a href="https://zkillboard.com/kill/{{k.killID}}/">{{iskFormat(k.zkb.totalValue)}}</a><br />{{k.killmail.killTime | date:"dd/MM/yy" }}</p></div></td>
-                <td><div><a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a></div></td>
-                <td><div><p class="systemp">{{k.killmail.solarSystem.name}} <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span><br />{{k.killmail.region.name}}</div></p>
-                <td><div><img class="kill-img" src="{{victimIcon(k)}}"></div></td>
-                <td><div><p>{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br />{{victimGuild(k)}}</p></div></td>
-                <td><div><img class="kill-img" src="{{finalBlowIcon(k)}}"></div></td>
-                <td><div><p>{{finalBlowName(k)}} ({{k.killmail.attackerCount}})<br />{{finalBlowGuild(k)}}</p></div></td>
+
+                <!-- Time, date and value -->
+                <td><div>
+                  <p>
+                    {{k.killmail.killTime | date:"HH:mm"}}<br />
+                    <a href="https://zkillboard.com/kill/{{k.killID}}/">{{iskFormat(k.zkb.totalValue)}}</a><br />
+                    {{k.killmail.killTime | date:"dd/MM/yy" }}
+                  </p>
+                </div></td>
+
+                <!-- Ship Icon -->
+                <td><div>
+                  <a href="https://zkillboard.com/kill/{{k.killID}}/"><img class="kill-img" src="https://image.eveonline.com/Type/{{k.killmail.victim.shipType.id}}_64.png"></a>
+                </div></td>
+
+                <!-- System and Region info -->
+                <td><div>
+                  <p class="systemp">
+                    {{k.killmail.solarSystem.name}}
+                    <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span>
+                    <br />{{k.killmail.region.name}}
+                  </p>
+                </div></td>
+
+                <!-- Victim icon -->
+                <td><div>
+                  <img class="kill-img" src="{{victimIcon(k)}}">
+                </div></td>
+
+                <!-- Victim info -->
+                <td><div>
+                  <p>
+                    <span class="hidden-xs">{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br /></span>
+                    {{victimGuild(k)}} <span class="visible-xs">({{k.killmail.victim.shipType.name}})</span>
+                  </p>
+                </div></td>
+
+                <!-- Final Blow icon -->
+                <td><div>
+                  <img class="kill-img" src="{{finalBlowIcon(k)}}">
+                </div></td>
+
+                <!-- Final Blow info -->
+                <td><div>
+                  <p>
+                    <span class="hidden-xs">{{finalBlowName(k)}} ({{k.killmail.attackerCount}})<br /></span>
+                    {{finalBlowGuild(k)}} <span class="visible-xs">({{k.killmail.attackerCount}})</span>
+                  </p>
+                </div></td>
             </tr>
         </table>
       </div>
