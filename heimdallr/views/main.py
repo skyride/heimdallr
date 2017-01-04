@@ -49,20 +49,36 @@ def search(params):
     except ValueError:
         return Response("[]", status=400, mimetype="application/json")
 
+    # $or accumulators
+    victimObj = []
+
     # victimCharacter
     if "victimCharacter" in params:
         if len(params['victimCharacter']) > 0:
-            search['killmail.victim.character.id'] = {"$in": list(params['victimCharacter'])}
+            victimObj.append({
+                'killmail.victim.character.id': {"$in": list(params['victimCharacter'])},
+            })
 
     # victimCorporation
     if "victimCorporation" in params:
         if len(params['victimCorporation']) > 0:
-            search['killmail.victim.corporation.id'] = {"$in": list(params['victimCorporation'])}
+            victimObj.append({
+                'killmail.victim.corporation.id': {"$in": list(params['victimCorporation'])},
+            })
 
     # victimAlliance
     if "victimAlliance" in params:
         if len(params['victimAlliance']) > 0:
-            search['killmail.victim.alliance.id'] = {"$in": list(params['victimAlliance'])}
+            victimObj.append({
+                'killmail.victim.alliance.id': {"$in": list(params['victimAlliance'])},
+            })
+
+    # victimShipType
+    if "victimShipType" in params:
+        if len(params['victimShipType']) > 0:
+            victimObj.append({
+                'killmail.victim.shipType.id': {"$in": list(params['victimShipType'])},
+            })
 
     # attackerCharacter
     if "attackerCharacter" in params:
@@ -78,11 +94,6 @@ def search(params):
     if "attackerAlliance" in params:
         if len(params['attackerAlliance']) > 0:
             search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
-
-    # victimShipType
-    if "victimShipType" in params:
-        if len(params['victimShipType']) > 0:
-            search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
 
     # carrying
     if "carrying" in params:
@@ -110,9 +121,20 @@ def search(params):
             search['zkb.totalValue'] = {"$gte": params['minimumValue']}
 
 
+    searchObj = {
+        "$and": []
+    }
+
+    # Build victim search object
+    if len(victimObj) > 0:
+        victimObj = {
+            "$or": victimObj
+        }
+        searchObj["$and"].append(victimObj)
+
     # Check we've generated search parameters before wasting the database's time
-    #if search == {}:
-    #    return Response("[]", status=400, mimetype="application/json")
+    if searchObj == { "$and": [] }:
+        searchObj = {}
 
     # Make sort order based on the existence of last mail received
     if "lastObj" in params:
@@ -123,5 +145,5 @@ def search(params):
 
 
     # Perform search and return result if there are any kills provided
-    r = db.kills.find(search, projection=projection, limit=50, sort=sort)
+    r = db.kills.find(searchObj, projection=projection, limit=50, sort=sort)
     return Response(response=dumps(r), status=200, mimetype="application/json")
