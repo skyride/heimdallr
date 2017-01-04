@@ -1,11 +1,8 @@
-import sys, os
-from flask import Flask, Response, render_template
-from pymongo import MongoClient, errors
+from flask import Response
+from pymongo import errors
 from bson.json_util import loads, dumps
 
-from heimdallr import app
-
-db = MongoClient().heimdallr
+from heimdallr import app, db
 
 @app.route("/")
 def main():
