@@ -101,8 +101,8 @@ def search(params):
 
 
     # Check we've generated search parameters before wasting the database's time
-    if search == {}:
-        return Response("[]", status=400, mimetype="application/json")
+    #if search == {}:
+    #    return Response("[]", status=400, mimetype="application/json")
 
     # Make sort order based on the existence of last mail received
     if "lastObj" in params:

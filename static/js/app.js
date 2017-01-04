@@ -1,10 +1,10 @@
 // Define the heimdallr module
-var heimdallrApp = angular.module('heimdallrApp', ['ngAnimate']);
+var heimdallrApp = angular.module('heimdallrApp', ['ngAnimate', 'ui.bootstrap']);
 
-// Define the KillListController
-heimdallrApp.controller('KillListController', function KillListController($scope, $http, $interval) {
+// Define the KillsController
+heimdallrApp.controller('KillsController', function KillsController($scope, $http, $interval) {
   $scope.kms = []
-  $scope.params = {'minimumValue': 10000035}
+  $scope.params = {}
 
   var getData = function() {
     $http.get("/search/"+JSON.stringify($scope.params))
