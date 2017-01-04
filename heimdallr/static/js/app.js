@@ -74,9 +74,24 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     });
   };
 
+  $scope.autoCompleteCorporation = function(search) {
+    return $http.get("/autocomplete/corporation/"+search)
+    .then(function(response) {
+      return response.data;
+    });
+  };
+
+  $scope.autoCompleteCharacter = function(search) {
+    return $http.get("/autocomplete/character/"+search)
+    .then(function(response) {
+      return response.data;
+    });
+  };
+
 
 
   // Manipulate Filters
+  // Alliance
   $scope.addVictimAlliance = function(item) {
     if(mapID($scope.params['victimAlliance']).indexOf(item.id) < 0) {
       $scope.params['victimAlliance'].push(item);
@@ -88,6 +103,40 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     if(mapID($scope.params['victimAlliance']).indexOf(item.id) > -1) {
       index = mapID($scope.params['victimAlliance']).indexOf(item.id);
       $scope.params['victimAlliance'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+  // Corporation
+  $scope.addVictimCorporation = function(item) {
+    if(mapID($scope.params['victimCorporation']).indexOf(item.id) < 0) {
+      $scope.params['victimCorporation'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeVictimCorporation = function(item) {
+    if(mapID($scope.params['victimCorporation']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['victimCorporation']).indexOf(item.id);
+      $scope.params['victimCorporation'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+  //Character
+  $scope.addVictimCharacter = function(item) {
+    if(mapID($scope.params['victimCharacter']).indexOf(item.id) < 0) {
+      $scope.params['victimCharacter'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeVictimCharacter = function(item) {
+    if(mapID($scope.params['victimCharacter']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['victimCharacter']).indexOf(item.id);
+      $scope.params['victimCharacter'].splice(index, 1);
       $scope.kms = [];
       getData();
     }

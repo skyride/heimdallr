@@ -29,10 +29,26 @@
     <![endif]-->
   </head>
 
-  <!-- Alliance TypeAhead templates -->
+  <!-- Alliance TypeAhead template -->
   <script type="text/ng-template" id="allianceTypeaheadResult.html">
     <a>
         <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Alliance/{{match.model.id}}_32.png">
+        <span>{{match.model.name}}</span>
+    </a>
+  </script>
+
+  <!-- Corporation TypeAhead template -->
+  <script type="text/ng-template" id="corporationTypeaheadResult.html">
+    <a>
+        <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Corporation/{{match.model.id}}_32.png">
+        <span>{{match.model.name}}</span>
+    </a>
+  </script>
+
+  <!-- Character TypeAhead template -->
+  <script type="text/ng-template" id="characterTypeaheadResult.html">
+    <a>
+        <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Character/{{match.model.id}}_32.jpg">
         <span>{{match.model.name}}</span>
     </a>
   </script>
@@ -112,7 +128,60 @@
                         </li>
                       </ul>
                     </li>
+                    <li role="separator" class="divider"></li>
 
+                    <!-- Corporation -->
+                    <li><a><strong>Corporation</strong></a></li>
+                    <li>
+                      <form class="navbar-form">
+                        <div class="form-group">
+                          <input type="text" class="form-control" ng-model="victimCorporationSearch" placeholder="Search"
+                            uib-typeahead="search as search.name for search in autoCompleteCorporation($viewValue) | limitTo: 20"
+                            typeahead-template-url="corporationTypeaheadResult.html"
+                            typeahead-on-select="addVictimCorporation($item); victimCorporationSearch = null" typeahead-min-length="3">
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <ul class="filter-list" ng-click="$event.stopPropagation()">
+                        <li ng-click="removeVictimCorporation(item)" ng-repeat="item in params.victimCorporation">
+                          <span class="text-primary">
+                            <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Corporation/{{item.id}}_32.png" />
+                            {{item.name}}
+                            <span class="pull-right">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                          </span>
+                        </li>
+                      </ul>
+                    </li>
+                    <li role="separator" class="divider"></li>
+
+                    <!-- Character -->
+                    <li><a><strong>Character</strong></a></li>
+                    <li>
+                      <form class="navbar-form">
+                        <div class="form-group">
+                          <input type="text" class="form-control" ng-model="victimCharacterSearch" placeholder="Search"
+                            uib-typeahead="search as search.name for search in autoCompleteCharacter($viewValue) | limitTo: 20"
+                            typeahead-template-url="characterTypeaheadResult.html"
+                            typeahead-on-select="addVictimCharacter($item); victimCharacterSearch = null" typeahead-min-length="3">
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <ul class="filter-list" ng-click="$event.stopPropagation()">
+                        <li ng-click="removeVictimCharacter(item)" ng-repeat="item in params.victimCharacter">
+                          <span class="text-primary">
+                            <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Character/{{item.id}}_128.jpg" />
+                            {{item.name}}
+                            <span class="pull-right">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                          </span>
+                        </li>
+                      </ul>
+                    </li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                   </ul>
