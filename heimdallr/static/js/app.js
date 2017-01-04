@@ -34,7 +34,6 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
         params[key] = mapID(params[key]);
       }
     }
-    console.log(params);
 
     $http.get("/search/"+JSON.stringify(params))
     .then(function(response) {
@@ -79,15 +78,15 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   // Manipulate Filters
   $scope.addVictimAlliance = function(item) {
-    if(!(item.id in mapID($scope.params['victimAlliance']))) {
+    if(mapID($scope.params['victimAlliance']).indexOf(item.id) < 0) {
       $scope.params['victimAlliance'].push(item);
       $scope.kms = [];
       getData();
     }
   };
   $scope.removeVictimAlliance = function(item) {
-    if(item.id in mapID($scope.params['victimAlliance'])) {
-      index = mapID($scope.params['victimAlliance']).indexOf(id);
+    if(mapID($scope.params['victimAlliance']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['victimAlliance']).indexOf(item.id);
       $scope.params['victimAlliance'].splice(index, 1);
       $scope.kms = [];
       getData();

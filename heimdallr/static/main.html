@@ -88,7 +88,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Victim <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <!-- Alliance -->
-                    <li><a><strong>Alliance</strong></li>
+                    <li><a><strong>Alliance</strong></a></li>
                     <li>
                       <form class="navbar-form">
                         <div class="form-group">
@@ -100,13 +100,15 @@
                       </form>
                     </li>
                     <li>
-                      <ul class="filter-list">
+                      <ul class="filter-list" ng-click="$event.stopPropagation()">
                         <li ng-click="removeVictimAlliance(item)" ng-repeat="item in params.victimAlliance">
+                          <span class="text-primary">
                             <img class="dropdown-icon" ng-src="https://imageserver.eveonline.com/Alliance/{{item.id}}_32.png" />
                             {{item.name}}
                             <span class="pull-right">
                               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </span>
+                          </span>
                         </li>
                       </ul>
                     </li>

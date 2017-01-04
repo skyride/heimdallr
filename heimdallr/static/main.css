@@ -33,6 +33,7 @@ ul.filter-list li {
 }
 ul.filter-list li {
   line-height: 24px;
+  cursor: pointer;
 }
 ul.filter-list li:hover {
   text-decoration: none;
