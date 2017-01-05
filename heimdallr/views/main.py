@@ -76,9 +76,7 @@ def search(params):
     # victimShipType
     if "victimShipType" in params:
         if len(params['victimShipType']) > 0:
-            victimObj.append({
-                'killmail.victim.shipType.id': {"$in": list(params['victimShipType'])},
-            })
+            search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
 
     # attackerCharacter
     if "attackerCharacter" in params:
@@ -127,10 +125,13 @@ def search(params):
 
     # Build victim search object
     if len(victimObj) > 0:
-        victimObj = {
-            "$or": victimObj
-        }
+        victimObj = { "$or": victimObj }
         searchObj["$and"].append(victimObj)
+
+    # Add victim ship
+    if "killmail.victim.shipType.id" in search:
+        obj = {"killmail.victim.shipType.id": search['killmail.victim.shipType.id']}
+        searchObj["$and"].append(obj)
 
     # Check we've generated search parameters before wasting the database's time
     if searchObj == { "$and": [] }:

@@ -56,8 +56,18 @@
   <!-- Ship TypeAhead template -->
   <script type="text/ng-template" id="shipTypeaheadResult.html">
     <a>
-        <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{match.model.typeID}}_32.png">
-        <span>{{match.model.typeName}}</span>
+        <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{match.model.id}}_32.png">
+        <span>{{match.model.name}}</span>
+    </a>
+  </script>
+
+  <!-- System TypeAhead template -->
+  <script type="text/ng-template" id="systemTypeaheadResult.html">
+    <a>
+        <div align="right" class="typeahead-sec {{$parent.$parent.$parent.$parent.sysSecClass(match.model.security)}}">{{$parent.$parent.$parent.$parent.sysSecStatus(match.model.security)}}</div>
+        <strong>{{match.model.name}}</strong> &lt;
+        {{match.model.constellationName}} &lt;
+        {{match.model.regionName}}
     </a>
   </script>
 
@@ -193,22 +203,22 @@
                     <li role="separator" class="divider"></li>
 
                     <!-- Ship Type -->
-                    <li><a><strong>Ship Type</strong></a></li>
+                    <li><a><strong>Type</strong></a></li>
                     <li>
                       <form class="navbar-form">
                         <div class="form-group">
                           <input type="text" class="form-control" ng-model="victimShipSearch" placeholder="Search"
-                            uib-typeahead="search as search.typeName for search in ships | filter: $viewValue | limitTo: 10"
+                            uib-typeahead="search as search.name for search in ships | filter: $viewValue | limitTo: 10"
                             typeahead-template-url="shipTypeaheadResult.html"
-                            typeahead-on-select="addVictimShip($item); victimCharacterSearch = null" typeahead-min-length="1">
+                            typeahead-on-select="addVictimShip($item); victimShipSearch = null" typeahead-min-length="1">
                         </div>
                       </form>
                     </li>
                     <li>
                       <ul class="filter-list" ng-click="$event.stopPropagation()">
-                        <li ng-click="removeVictimShip(item)" ng-repeat="item in params.victimShip">
+                        <li ng-click="removeVictimShip(item)" ng-repeat="item in params.victimShipType">
                           <span class="text-primary">
-                            <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{item.typeID}}_32.png" />
+                            <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{item.id}}_32.png" />
                             {{item.name}}
                             <span class="pull-right">
                               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -217,8 +227,40 @@
                         </li>
                       </ul>
                     </li>
-                    <li role="separator" class="divider"></li>
+                    <!-- <li role="separator" class="divider"></li> -->
                   </ul>
+
+                  <!-- Location -->
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Location <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <!-- System -->
+                      <li><a><strong>System</strong></a></li>
+                      <li>
+                        <form class="navbar-form">
+                          <div class="form-group">
+                            <input type="text" class="form-control" ng-model="systemSearch" placeholder="Search"
+                              uib-typeahead="search as search.name for search in systems | filter: $viewValue | limitTo: 10"
+                              typeahead-template-url="systemTypeaheadResult.html"
+                              typeahead-on-select="addSystem($item); systemSearch = null" typeahead-min-length="2">
+                          </div>
+                        </form>
+                      </li>
+                      <li>
+                        <ul class="filter-list" ng-click="$event.stopPropagation()">
+                          <li ng-click="removeSystem(item)" ng-repeat="item in params.solarSystem">
+                            <span class="text-primary">
+                              {{item.name}} <span class="{{sysSecClass(item.security)}}">{{sysSecStatus(item.security)}}</span>
+                              <span class="pull-right">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li role="separator" class="divider"></li>
+                    </ul>
+                  </li>
                 </li>
               </ul>
 

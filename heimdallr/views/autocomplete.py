@@ -78,10 +78,27 @@ def ships():
     sde = sdeFactory()
 
     # Query for ships
-    rows = sde.query("SELECT typeID, invTypes.groupID as groupID, typeName \
+    rows = sde.query("SELECT typeID as `id`, invTypes.groupID as groupID, typeName as `name` \
                       FROM invTypes \
                       INNER JOIN invGroups ON invGroups.groupID = invTypes.groupID \
-                      WHERE invGroups.categoryID = 6 \
+                      WHERE invGroups.categoryID IN (6, 22, 23, 87, 65) \
+                      AND invTypes.published = 1 \
                       ORDER BY invTypes.mass DESC")
+
+    return Response(response=rows.export('json'), status=200, mimetype="application/json")
+
+
+# Returns all ships for local autocomplete
+@app.route("/autocomplete/groups", methods=['GET'])
+def groups():
+    # Get sde connection from factory
+    sde = sdeFactory()
+
+    # Query for ships
+    rows = sde.query("SELECT groupID as `id`, categoryID, groupName as `name` \
+                      FROM invGroups \
+                      WHERE categoryID IN (6, 22, 23, 87, 65) \
+                      AND published = 1 \
+                      ORDER BY categoryID, groupName")
 
     return Response(response=rows.export('json'), status=200, mimetype="application/json")

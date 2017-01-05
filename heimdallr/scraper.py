@@ -13,12 +13,17 @@ def insertAlliance(id):
 
     url = "https://esi.tech.ccp.is/latest/alliances/%s/" % id
     data = json.loads(requests.get(url=url).text)
-    alliance = {
-        "id": id,
-        "name": data['alliance_name'],
-        "ticker": data['ticker'],
-        "startDate": data['date_founded'],
-    }
+    try:
+        alliance = {
+            "id": id,
+            "name": data['alliance_name'],
+            "ticker": data['ticker'],
+            "startDate": data['date_founded'],
+        }
+    except KeyError:
+        print "ESI API Error getting alliance ID: %s" % id
+        return
+
     # try Insert
     try:
         id = db.alliances.insert_one(alliance).inserted_id
@@ -34,11 +39,16 @@ def insertCorporation(id):
 
     url = "https://esi.tech.ccp.is/latest/corporations/%s/" % id
     data = json.loads(requests.get(url=url).text)
-    corporation = {
-        "id": id,
-        "name": data['corporation_name'],
-        "ticker": data['ticker'],
-    }
+    try:
+        corporation = {
+            "id": id,
+            "name": data['corporation_name'],
+            "ticker": data['ticker'],
+        }
+    except KeyError:
+        print "ESI API Error getting corporation ID: %s" % id
+        return
+
     # try Insert
     try:
         id = db.corporations.insert_one(corporation).inserted_id
@@ -54,10 +64,15 @@ def insertCharacter(id):
 
     url = "https://esi.tech.ccp.is/latest/characters/%s/" % id
     data = json.loads(requests.get(url=url).text)
-    character = {
-        "id": id,
-        "name": data['name'],
-    }
+    try:
+        character = {
+            "id": id,
+            "name": data['name'],
+        }
+    except KeyError:
+        print "ESI API Error getting character ID: %s" % id
+        return
+
     # try Insert
     try:
         id = db.characters.insert_one(character).inserted_id

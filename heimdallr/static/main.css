@@ -45,6 +45,12 @@ ul.filter-list li span.glyphicon {
   vertical-align: middle;
 }
 
+.typeahead-sec {
+  float: left;
+  width: 24px;
+  text-align: right;
+  margin-right: 5px;
+}
 
 /* Kills */
 tr.ng-enter {

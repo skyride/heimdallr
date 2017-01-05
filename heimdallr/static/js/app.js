@@ -14,10 +14,10 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     "victimCharacter": [],
     "victimCorporation": [],
     "victimAlliance": [],
+    "victimShipType": [],
     "attackerCharacter": [],
     "attackerCorporation": [],
     "attackerAlliance": [],
-    "victimShipType": [],
     "carrying": [],
     "solarSystem": [],
     "constellation": [],
@@ -25,11 +25,27 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     "minimumValue": null
   };
   $scope.baseParams = JSON.parse(JSON.stringify($scope.params));
+
+  // Static data for autocompletion
   $scope.ships = [];
+  $scope.groups = [];
+  $scope.systems = [];
+
   $http.get("/autocomplete/ships")
   .then(function(response) {
     $scope.ships = response.data;
   });
+
+  $http.get("/autocomplete/groups")
+  .then(function(response) {
+    $scope.groups = response.data;
+  });
+
+  $http.get("/autocomplete/systems")
+  .then(function(response) {
+    $scope.systems = response.data;
+  });
+
 
   var getData = function() {
     // Prune the param object from objects to ids
@@ -130,7 +146,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
-  //Character
+  // Character
   $scope.addVictimCharacter = function(item) {
     if(mapID($scope.params['victimCharacter']).indexOf(item.id) < 0) {
       $scope.params['victimCharacter'].push(item);
@@ -142,6 +158,23 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     if(mapID($scope.params['victimCharacter']).indexOf(item.id) > -1) {
       index = mapID($scope.params['victimCharacter']).indexOf(item.id);
       $scope.params['victimCharacter'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+  // Ship
+  $scope.addVictimShip = function(item) {
+    if(mapID($scope.params['victimShipType']).indexOf(item.id) < 0) {
+      $scope.params['victimShipType'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeVictimShip = function(item) {
+    if(mapID($scope.params['victimShipType']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['victimShipType']).indexOf(item.id);
+      $scope.params['victimShipType'].splice(index, 1);
       $scope.kms = [];
       getData();
     }

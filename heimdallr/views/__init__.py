@@ -1,1 +1,1 @@
-from . import main, autocomplete
+from . import main, autocomplete, map
