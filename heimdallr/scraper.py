@@ -56,7 +56,7 @@ def insertCharacter(id):
     data = json.loads(requests.get(url=url).text)
     character = {
         "id": id,
-        "name": data['character_name'],
+        "name": data['name'],
     }
     # try Insert
     try:
