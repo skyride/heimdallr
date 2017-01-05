@@ -53,6 +53,14 @@
     </a>
   </script>
 
+  <!-- Ship TypeAhead template -->
+  <script type="text/ng-template" id="shipTypeaheadResult.html">
+    <a>
+        <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{match.model.typeID}}_32.png">
+        <span>{{match.model.typeName}}</span>
+    </a>
+  </script>
+
 
   <body>
     <!-- Static navbar -->
@@ -183,7 +191,33 @@
                       </ul>
                     </li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
+
+                    <!-- Ship Type -->
+                    <li><a><strong>Ship Type</strong></a></li>
+                    <li>
+                      <form class="navbar-form">
+                        <div class="form-group">
+                          <input type="text" class="form-control" ng-model="victimShipSearch" placeholder="Search"
+                            uib-typeahead="search as search.typeName for search in ships | filter: $viewValue | limitTo: 10"
+                            typeahead-template-url="shipTypeaheadResult.html"
+                            typeahead-on-select="addVictimShip($item); victimCharacterSearch = null" typeahead-min-length="1">
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <ul class="filter-list" ng-click="$event.stopPropagation()">
+                        <li ng-click="removeVictimShip(item)" ng-repeat="item in params.victimShip">
+                          <span class="text-primary">
+                            <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{item.typeID}}_32.png" />
+                            {{item.name}}
+                            <span class="pull-right">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                          </span>
+                        </li>
+                      </ul>
+                    </li>
+                    <li role="separator" class="divider"></li>
                   </ul>
                 </li>
               </ul>

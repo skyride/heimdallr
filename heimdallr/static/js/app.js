@@ -25,6 +25,11 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     "minimumValue": null
   };
   $scope.baseParams = JSON.parse(JSON.stringify($scope.params));
+  $scope.ships = [];
+  $http.get("/autocomplete/ships")
+  .then(function(response) {
+    $scope.ships = response.data;
+  });
 
   var getData = function() {
     // Prune the param object from objects to ids

@@ -3,7 +3,7 @@ from pymongo import errors
 from bson.json_util import dumps
 
 from heimdallr import app
-from heimdallr.db import db
+from heimdallr.db import db, sdeFactory
 
 # Returns autocomplete results for alliance search
 @app.route("/autocomplete/alliance/<string:search>", methods=['GET'])
@@ -69,3 +69,19 @@ def character(search):
     projection = {"_id": False }
     r = db.characters.find(searchobj, projection=projection, limit=50)
     return Response(response=dumps(r), status=200, mimetype="application/json")
+
+
+# Returns all ships for local autocomplete
+@app.route("/autocomplete/ships", methods=['GET'])
+def ships():
+    # Get sde connection from factory
+    sde = sdeFactory()
+
+    # Query for ships
+    rows = sde.query("SELECT typeID, invTypes.groupID as groupID, typeName \
+                      FROM invTypes \
+                      INNER JOIN invGroups ON invGroups.groupID = invTypes.groupID \
+                      WHERE invGroups.categoryID = 6 \
+                      ORDER BY invTypes.mass DESC")
+
+    return Response(response=rows.export('json'), status=200, mimetype="application/json")
