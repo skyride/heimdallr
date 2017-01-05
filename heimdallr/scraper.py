@@ -3,7 +3,7 @@ import traceback
 import json, requests, datetime
 from bson.json_util import loads, dumps
 
-from heimdallr.db import db
+from db import db
 
 # Insert an alliance
 def insertAlliance(id):
