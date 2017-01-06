@@ -84,7 +84,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   getData();
   $interval(function() {
     getData();
-  }, 3000);
+  }, 10000);
 
 
   // Autocomplete Feeds

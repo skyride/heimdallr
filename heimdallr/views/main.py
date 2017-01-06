@@ -138,11 +138,13 @@ def search(params):
         searchObj = {}
 
     # Make sort order based on the existence of last mail received
-    if "lastObj" in params:
-        #sort = [("_id", -1)]
-        sort = [("killmail.killTime", -1)]
+    if searchObj == {}:
+        sort = [("_id", -1)]
     else:
         sort = [("killmail.killTime", -1)]
+        #sort = [("_id", -1)]
+
+    print dumps(searchObj)
 
 
     # Perform search and return result if there are any kills provided
