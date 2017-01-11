@@ -189,6 +189,17 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   };
 
 
+  // Click functions
+  $scope.addVictim = function(item) {
+    // Check if we have an alliance, otherwise just use the corporation
+    if("alliance" in item.killmail.victim) {
+      $scope.addVictimAlliance(item.killmail.victim.alliance);
+    } else {
+      $scope.addVictimCorporation(item.killmail.victim.corporation);
+    }
+  }
+
+
   // Display functions
   $scope.iskFormat = function(isk) {
     return numeral(isk).format('0,0.00a');
