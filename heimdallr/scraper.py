@@ -1,9 +1,31 @@
 from pymongo import MongoClient, errors
+import os
 import traceback
 import json, requests, datetime
+import re
 from bson.json_util import loads, dumps
 
 from db import db
+
+# Prunes instances of useless data from the object
+def prune(obj):
+    if isinstance(obj, dict):
+        for key in obj.keys():
+            if key == "href":
+                obj.pop("href")
+            else:
+                m = re.search(r".*_str", key)
+                if m:
+                    obj.pop(key)
+                else:
+                    obj[key] = prune(obj[key])
+
+    if isinstance(obj, list):
+        for item in obj:
+            item = prune(item)
+
+    return obj
+
 
 # Insert an alliance
 def insertAlliance(id):
@@ -79,72 +101,77 @@ def insertCharacter(id):
     except errors.DuplicateKeyError:
         pass
 
-
-# Perform request and save it if it isn't null
-redisq = "https://redisq.zkillboard.com/listen.php"
-while 1 > 0:
-    try:
-        request = requests.get(url=redisq).text
-        data = json.loads(request)['package']
-        #print data
-        if data != None:
-            try:
-                # Add constellation and region
-                sysurl = "https://crest-tq.eveonline.com/solarsystems/%s/" % (data['killmail']['solarSystem']['id'])
-                system = json.loads(requests.get(url=sysurl).text)
-                constellation = json.loads(requests.get(url=system['constellation']['href']).text)
-                region = json.loads(requests.get(url=constellation['region']['href']).text)
-
-                data['killmail']['solarSystem']['securityStatus'] = system['securityStatus']
-
-                data['killmail']['constellation'] = {
-                    "id": system['constellation']['id'],
-                    "name": constellation['name'],
-                }
-
-                data['killmail']['region'] = {
-                    "id": region['id'],
-                    "name": region['name'],
-                }
-
-                # Put the final blow attacker as its own thing on the killmail
-                for attacker in data['killmail']['attackers']:
-                    if attacker['finalBlow'] == True:
-                        data['killmail']['finalBlow'] = attacker
-
-                id = db.kills.insert_one(data).inserted_id
-
-                # Try insert the data to search indexes
-                # Alliances
-                if "alliance" in data['killmail']['victim']:
-                    insertAlliance(data['killmail']['victim']['alliance']['id'])
-                for attacker in data['killmail']['attackers']:
-                    if "alliance" in attacker:
-                        insertAlliance(attacker['alliance']['id'])
-
-                # Corporations
-                if "corporation" in data['killmail']['victim']:
-                    insertCorporation(data['killmail']['victim']['corporation']['id'])
-                for attacker in data['killmail']['attackers']:
-                    if "corporation" in attacker:
-                        insertCorporation(attacker['corporation']['id'])
-
-                # Characters
-                if "character" in data['killmail']['victim']:
-                    insertCharacter(data['killmail']['victim']['character']['id'])
-                for attacker in data['killmail']['attackers']:
-                    if "character" in attacker:
-                        insertCharacter(attacker['character']['id'])
-
+def scrape():
+    # Perform request and save it if it isn't null
+    redisq = "https://redisq.zkillboard.com/listen.php"
+    while 1 > 0:
+        try:
+            request = requests.get(url=redisq).text
+            data = json.loads(request)['package']
+            #print data
+            if data != None:
                 try:
-                    print "[%s]: %s (%s) %s's %s" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'], data['killmail']['victim']['corporation']['name'], data['killmail']['victim']['shipType']['name'])
-                except Exception:
-                    print "[%s]: %s (%s) Non-ship mail" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'])
-            except errors.DuplicateKeyError:
-                print "DuplicateKeyError for KillID: %s" % data['killID']
-            except KeyError:
-                print dumps(data)
-                traceback.print_exc()
-    except ValueError:
-        print json
-        traceback.print_exc()
+                    # Add constellation and region
+                    sysurl = "https://crest-tq.eveonline.com/solarsystems/%s/" % (data['killmail']['solarSystem']['id'])
+                    system = json.loads(requests.get(url=sysurl).text)
+                    constellation = json.loads(requests.get(url=system['constellation']['href']).text)
+                    region = json.loads(requests.get(url=constellation['region']['href']).text)
+
+                    data['killmail']['solarSystem']['securityStatus'] = system['securityStatus']
+
+                    data['killmail']['constellation'] = {
+                        "id": system['constellation']['id'],
+                        "name": constellation['name'],
+                    }
+
+                    data['killmail']['region'] = {
+                        "id": region['id'],
+                        "name": region['name'],
+                    }
+
+                    # Put the final blow attacker as its own thing on the killmail
+                    for attacker in data['killmail']['attackers']:
+                        if attacker['finalBlow'] == True:
+                            data['killmail']['finalBlow'] = attacker
+
+                    data = prune(data)
+                    id = db.kills.insert_one(data).inserted_id
+
+                    # Try insert the data to search indexes
+                    # Alliances
+                    if "alliance" in data['killmail']['victim']:
+                        insertAlliance(data['killmail']['victim']['alliance']['id'])
+                    for attacker in data['killmail']['attackers']:
+                        if "alliance" in attacker:
+                            insertAlliance(attacker['alliance']['id'])
+
+                    # Corporations
+                    if "corporation" in data['killmail']['victim']:
+                        insertCorporation(data['killmail']['victim']['corporation']['id'])
+                    for attacker in data['killmail']['attackers']:
+                        if "corporation" in attacker:
+                            insertCorporation(attacker['corporation']['id'])
+
+                    # Characters
+                    if "character" in data['killmail']['victim']:
+                        insertCharacter(data['killmail']['victim']['character']['id'])
+                    for attacker in data['killmail']['attackers']:
+                        if "character" in attacker:
+                            insertCharacter(attacker['character']['id'])
+
+                    try:
+                        print "[%s]: %s (%s) %s's %s" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'], data['killmail']['victim']['corporation']['name'], data['killmail']['victim']['shipType']['name'])
+                    except Exception:
+                        print "[%s]: %s (%s) Non-ship mail" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'])
+                except errors.DuplicateKeyError:
+                    print "DuplicateKeyError for KillID: %s" % data['killID']
+                except KeyError:
+                    print dumps(data)
+                    traceback.print_exc()
+        except ValueError:
+            print json
+            traceback.print_exc()
+
+
+if os.path.basename(__file__) == "scraper.py":
+    scrape()
