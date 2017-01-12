@@ -200,6 +200,24 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
+  // System
+  $scope.addSystem = function(item) {
+    if(mapID($scope.params['solarSystem']).indexOf(item.id) < 0) {
+      $scope.params['solarSystem'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeSystem = function(item) {
+    if(mapID($scope.params['solarSystem']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['solarSystem']).indexOf(item.id);
+      $scope.params['solarSystem'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+
   $scope.resetFilters = function() {
     if(JSON.stringify($scope.params) !== JSON.stringify($scope.baseParams)) {
       $scope.params = JSON.parse(JSON.stringify($scope.baseParams));

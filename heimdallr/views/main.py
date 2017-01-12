@@ -35,9 +35,15 @@ def search(params):
     except ValueError:
         return Response("[]", status=400, mimetype="application/json")
 
+    # Base search object
+    searchObj = {
+        "$and": []
+    }
+
     # $or accumulators
     victimObj = []
     victimShipObj = []
+    locationObj = []
 
     # victimCharacter
     if "victimCharacter" in params:
@@ -97,27 +103,29 @@ def search(params):
     # solarSystem
     if "solarSystem" in params:
         if len(params['solarSystem']) > 0:
-            search['killmail.solarSystem.id'] = {"$in": list(params['solarSystem'])}
+            locationObj.append({
+                'killmail.solarSystem.id': {"$in": list(params['solarSystem'])},
+            })
 
     # constellation
     if "constellation" in params:
         if len(params['constellation']) > 0:
-            search['killmail.constellation.id'] = {"$in": list(params['constellation'])}
+            locationObj.append({
+                'killmail.constellation.id': {"$in": list(params['constellation'])},
+            })
 
     # region
     if "region" in params:
         if len(params['region']) > 0:
-            search['killmail.region.id'] = {"$in": list(params['region'])}
+            locationObj.append({
+                'killmail.region.id': {"$in": list(params['region'])},
+            })
 
     # minimumValue
     if "minimumValue" in params:
         if params['minimumValue'] != None:
             search['zkb.totalValue'] = {"$gte": params['minimumValue']}
 
-
-    searchObj = {
-        "$and": []
-    }
 
     # Build search object
     if len(victimObj) > 0:
@@ -127,6 +135,10 @@ def search(params):
     if len(victimShipObj) > 0:
         victimShipObj = { "$or": victimShipObj }
         searchObj["$and"].append(victimShipObj)
+
+    if len(locationObj) > 0:
+        locationObj = { "$or": locationObj }
+        searchObj["$and"].append(locationObj)
 
     # Add victim ship
     if "killmail.victim.shipType.id" in search:
