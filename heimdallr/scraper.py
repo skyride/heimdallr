@@ -5,7 +5,7 @@ import json, requests, datetime
 import re
 from bson.json_util import loads, dumps
 
-from db import db
+from heimdallr.db import db, sdeFactory
 
 # Prunes instances of useless data from the object
 def prune(obj):
@@ -25,6 +25,19 @@ def prune(obj):
             item = prune(item)
 
     return obj
+
+
+def getGroupObj(typeID):
+    # Get sde connection from factory
+    sde = sdeFactory()
+
+    # Query for the group based on the typeID
+    rows = sde.query("SELECT invGroups.groupID as `id`, groupName as `name`, categoryID \
+                      FROM invTypes \
+                      INNER JOIN invGroups ON invGroups.groupID = invTypes.groupID \
+                      WHERE invTypes.typeID = :typeID", typeID=typeID)
+
+    return loads(rows.export('json'))[0]
 
 
 # Insert an alliance
@@ -134,30 +147,44 @@ def scrape():
                         if attacker['finalBlow'] == True:
                             data['killmail']['finalBlow'] = attacker
 
+                    # Prune useless data to save space
                     data = prune(data)
-                    id = db.kills.insert_one(data).inserted_id
 
                     # Try insert the data to search indexes
                     # Alliances
                     if "alliance" in data['killmail']['victim']:
                         insertAlliance(data['killmail']['victim']['alliance']['id'])
-                    for attacker in data['killmail']['attackers']:
-                        if "alliance" in attacker:
-                            insertAlliance(attacker['alliance']['id'])
 
                     # Corporations
                     if "corporation" in data['killmail']['victim']:
                         insertCorporation(data['killmail']['victim']['corporation']['id'])
-                    for attacker in data['killmail']['attackers']:
-                        if "corporation" in attacker:
-                            insertCorporation(attacker['corporation']['id'])
 
                     # Characters
                     if "character" in data['killmail']['victim']:
                         insertCharacter(data['killmail']['victim']['character']['id'])
+
+                    # Add ship group for victim
+                    if "shipType" in data['killmail']['victim']:
+                        data['killmail']['victim']['shipGroup'] = getGroupObj(data['killmail']['victim']['shipType']['id'])
+
+                    # Process Attackers
                     for attacker in data['killmail']['attackers']:
+                        if "alliance" in attacker:
+                            insertAlliance(attacker['alliance']['id'])
+
+                        if "corporation" in attacker:
+                            insertCorporation(attacker['corporation']['id'])
+
                         if "character" in attacker:
                             insertCharacter(attacker['character']['id'])
+
+                        # Add Group
+                        if "shipType" in attacker:
+                            attacker['shipGroup'] = getGroupObj(attacker['shipType']['id'])
+
+                    # Insert the Lill
+                    id = db.kills.insert_one(data).inserted_id
+
 
                     try:
                         print "[%s]: %s (%s) %s's %s" % (datetime.datetime.now(), data['killmail']['killTime'], data['killID'], data['killmail']['victim']['corporation']['name'], data['killmail']['victim']['shipType']['name'])
@@ -175,3 +202,4 @@ def scrape():
 
 if os.path.basename(__file__) == "scraper.py":
     scrape()
+    pass

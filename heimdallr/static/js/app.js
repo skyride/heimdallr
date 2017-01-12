@@ -15,9 +15,12 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     "victimCorporation": [],
     "victimAlliance": [],
     "victimShipType": [],
+    "victimShipGroup": [],
     "attackerCharacter": [],
     "attackerCorporation": [],
     "attackerAlliance": [],
+    "attackerShipType": [],
+    "attackerShipGroup": [],
     "carrying": [],
     "solarSystem": [],
     "constellation": [],
@@ -112,7 +115,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
 
   // Manipulate Filters
-  // Alliance
+  // Victim Alliance
   $scope.addVictimAlliance = function(item) {
     if(mapID($scope.params['victimAlliance']).indexOf(item.id) < 0) {
       $scope.params['victimAlliance'].push(item);
@@ -129,7 +132,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
-  // Corporation
+  // Victim Corporation
   $scope.addVictimCorporation = function(item) {
     if(mapID($scope.params['victimCorporation']).indexOf(item.id) < 0) {
       $scope.params['victimCorporation'].push(item);
@@ -146,7 +149,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
-  // Character
+  // Victim Character
   $scope.addVictimCharacter = function(item) {
     if(mapID($scope.params['victimCharacter']).indexOf(item.id) < 0) {
       $scope.params['victimCharacter'].push(item);
@@ -163,7 +166,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
-  // Ship
+  // Victim Ship
   $scope.addVictimShip = function(item) {
     if(mapID($scope.params['victimShipType']).indexOf(item.id) < 0) {
       $scope.params['victimShipType'].push(item);
@@ -175,6 +178,23 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     if(mapID($scope.params['victimShipType']).indexOf(item.id) > -1) {
       index = mapID($scope.params['victimShipType']).indexOf(item.id);
       $scope.params['victimShipType'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+  // Victim Group
+  $scope.addVictimGroup = function(item) {
+    if(mapID($scope.params['victimShipGroup']).indexOf(item.id) < 0) {
+      $scope.params['victimShipGroup'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeVictimShip = function(item) {
+    if(mapID($scope.params['victimShipGroup']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['victimShipGroup']).indexOf(item.id);
+      $scope.params['victimShipGroup'].splice(index, 1);
       $scope.kms = [];
       getData();
     }

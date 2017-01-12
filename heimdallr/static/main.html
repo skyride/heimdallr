@@ -227,6 +227,31 @@
                         </li>
                       </ul>
                     </li>
+                    <li role="separator" class="divider"></li>
+
+                    <!-- Ship Groups -->
+                    <li><a><strong>Group</strong></a></li>
+                    <li>
+                      <form class="navbar-form">
+                        <div class="form-group">
+                          <input type="text" class="form-control" ng-model="victimGroupSearch" placeholder="Search"
+                            uib-typeahead="search as search.name for search in groups | filter: $viewValue | limitTo: 10"
+                            typeahead-on-select="addVictimGroup($item); victimGroupSearch = null" typeahead-min-length="2">
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <ul class="filter-list" ng-click="$event.stopPropagation()">
+                        <li ng-click="removeVictimGroup(item)" ng-repeat="item in params.victimShipGroup">
+                          <span class="text-primary">
+                            {{item.name}}
+                            <span class="pull-right">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                          </span>
+                        </li>
+                      </ul>
+                    </li>
                     <!-- <li role="separator" class="divider"></li> -->
                   </ul>
 
