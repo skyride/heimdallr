@@ -4,6 +4,7 @@ from bson.json_util import dumps
 
 from heimdallr import app
 from heimdallr.db import db, sdeFactory
+from heimdallr.views import projections
 
 # Returns autocomplete results for alliance search
 @app.route("/autocomplete/alliance/<string:search>", methods=['GET'])
@@ -25,8 +26,7 @@ def alliance(search):
         ]
     }
 
-    projection = {"_id": False }
-    r = db.alliances.find(searchobj, projection=projection, limit=50)
+    r = db.alliances.find(searchobj, projection=projections.autoComplete, limit=50)
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 
@@ -50,8 +50,7 @@ def corporation(search):
         ]
     }
 
-    projection = {"_id": False }
-    r = db.corporations.find(searchobj, projection=projection, limit=50)
+    r = db.corporations.find(searchobj, projection=projections.autoComplete, limit=50)
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 
@@ -66,8 +65,7 @@ def character(search):
         }
     }
 
-    projection = {"_id": False }
-    r = db.characters.find(searchobj, projection=projection, limit=50)
+    r = db.characters.find(searchobj, projection=projections.autoComplete, limit=50)
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 

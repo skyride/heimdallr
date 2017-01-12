@@ -4,6 +4,7 @@ from bson.json_util import loads, dumps
 
 from heimdallr import app
 from heimdallr.db import db
+from heimdallr.views import projections
 
 @app.route("/")
 def main():
@@ -13,7 +14,7 @@ def main():
 # Returns the full kill object
 @app.route("/kill/<int:killID>", methods=['GET'])
 def kill(killID):
-    kill = db.kills.find_one({"killID": killID}, projection={"_id": False})
+    kill = db.kills.find_one({"killID": killID}, projection=projections.nullID)
     if kill != None:
         return Response(response=dumps(kill), status=200, mimetype="application/json")
     else:
@@ -27,21 +28,6 @@ def kill(killID):
 def search(params):
     # Starting values
     search = {}
-    projection = {
-        "_id": True,
-        "killID": True,
-        "killmail.killTime": True,
-        "killmail.solarSystem": True,
-        "killmail.region": True,
-        "killmail.attackerCount": True,
-        "killmail.victim.alliance": True,
-        "killmail.victim.corporation": True,
-        "killmail.victim.character": True,
-        "killmail.victim.shipType": True,
-        "killmail.victim.damageTaken": True,
-        "killmail.finalBlow": True,
-        "zkb.totalValue": True,
-    }
 
     # Decode the search params
     try:
@@ -148,5 +134,5 @@ def search(params):
 
 
     # Perform search and return result if there are any kills provided
-    r = db.kills.find(searchObj, projection=projection, limit=50, sort=sort)
+    r = db.kills.find(searchObj, projection=projections.killList, limit=50, sort=sort)
     return Response(response=dumps(r), status=200, mimetype="application/json")
