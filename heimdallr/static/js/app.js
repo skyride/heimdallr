@@ -191,7 +191,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
     }
   };
-  $scope.removeVictimShip = function(item) {
+  $scope.removeVictimGroup = function(item) {
     if(mapID($scope.params['victimShipGroup']).indexOf(item.id) > -1) {
       index = mapID($scope.params['victimShipGroup']).indexOf(item.id);
       $scope.params['victimShipGroup'].splice(index, 1);

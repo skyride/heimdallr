@@ -37,6 +37,7 @@ def search(params):
 
     # $or accumulators
     victimObj = []
+    victimShipObj = []
 
     # victimCharacter
     if "victimCharacter" in params:
@@ -62,7 +63,16 @@ def search(params):
     # victimShipType
     if "victimShipType" in params:
         if len(params['victimShipType']) > 0:
-            search['killmail.victim.shipType.id'] = {"$in": list(params['victimShipType'])}
+            victimShipObj.append({
+                'killmail.victim.shipType.id': {"$in": list(params['victimShipType'])},
+            })
+
+    # victimShipGroup
+    if "victimShipGroup" in params:
+        if len(params['victimShipGroup']) > 0:
+            victimShipObj.append({
+                'killmail.victim.shipGroup.id': {"$in": list(params['victimShipGroup'])},
+            })
 
     # attackerCharacter
     if "attackerCharacter" in params:
@@ -109,10 +119,14 @@ def search(params):
         "$and": []
     }
 
-    # Build victim search object
+    # Build search object
     if len(victimObj) > 0:
         victimObj = { "$or": victimObj }
         searchObj["$and"].append(victimObj)
+
+    if len(victimShipObj) > 0:
+        victimShipObj = { "$or": victimShipObj }
+        searchObj["$and"].append(victimShipObj)
 
     # Add victim ship
     if "killmail.victim.shipType.id" in search:
