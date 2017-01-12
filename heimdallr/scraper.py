@@ -5,7 +5,7 @@ import json, requests, datetime
 import re
 from bson.json_util import loads, dumps
 
-from heimdallr.db import db, sdeFactory
+from db import db, sdeFactory
 
 # Prunes instances of useless data from the object
 def prune(obj):
