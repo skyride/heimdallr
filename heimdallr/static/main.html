@@ -275,8 +275,10 @@
                         <ul class="filter-list" ng-click="$event.stopPropagation()">
                           <li ng-click="removeSystem(item)" ng-repeat="item in params.solarSystem">
                             <span class="text-primary">
-                              {{item.name}} <span class="{{sysSecClass(item.security)}}">{{sysSecStatus(item.security)}}</span>
+                              {{item.name}}
                               <span class="pull-right">
+                                {{item.regionName}}
+                                (<span class="{{sysSecClass(item.security)}}">{{sysSecStatus(item.security)}}</span>)
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                               </span>
                             </span>
