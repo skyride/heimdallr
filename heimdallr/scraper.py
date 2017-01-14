@@ -182,7 +182,7 @@ def scrape():
                         if "shipType" in attacker:
                             attacker['shipGroup'] = getGroupObj(attacker['shipType']['id'])
 
-                    # Insert the Lill
+                    # Insert the Kill
                     id = db.kills.insert_one(data).inserted_id
 
 

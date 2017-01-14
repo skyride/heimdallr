@@ -265,7 +265,7 @@
                         <form class="navbar-form">
                           <div class="form-group">
                             <input type="text" class="form-control" ng-model="systemSearch" placeholder="Search"
-                              uib-typeahead="search as search.name for search in systems | filter: $viewValue | limitTo: 10"
+                              uib-typeahead="search as search.name for search in systems | filter: {'name': $viewValue} | limitTo: 10"
                               typeahead-template-url="systemTypeaheadResult.html"
                               typeahead-on-select="addSystem($item); systemSearch = null" typeahead-min-length="2">
                           </div>
