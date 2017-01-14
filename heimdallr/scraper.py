@@ -198,6 +198,8 @@ def scrape():
         except ValueError:
             print json
             traceback.print_exc()
+        except Exception:
+            pass
 
 
 if os.path.basename(__file__) == "scraper.py":
