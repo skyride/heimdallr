@@ -30,7 +30,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   $scope.baseParams = JSON.parse(JSON.stringify($scope.params));
 
   // Take the URL params if there are any
-  if($location.path() != "/") {
+  if($location.path().length > 1) {
     $scope.params = JSON.parse(atob($location.path().slice(1)))
   }
 
