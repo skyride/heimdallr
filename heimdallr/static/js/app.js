@@ -8,7 +8,7 @@ function mapID(arr) {
 }
 
 // Define the KillsController
-heimdallrApp.controller('KillsController', function KillsController($scope, $http, $interval) {
+heimdallrApp.controller('KillsController', function KillsController($scope, $http, $interval, $location) {
   $scope.kms = [];
   $scope.params = {
     "victimCharacter": [],
@@ -28,6 +28,11 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     "minimumValue": null
   };
   $scope.baseParams = JSON.parse(JSON.stringify($scope.params));
+
+  // Take the URL params if there are any
+  if($location.path() != "/") {
+    $scope.params = JSON.parse(atob($location.path().slice(1)))
+  }
 
   // Static data for autocompletion
   $scope.ships = [];
@@ -61,15 +66,20 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     $scope.regions = response.data;
   });
 
-
-  var getData = function() {
-    // Prune the param object from objects to ids
-    params = JSON.parse(JSON.stringify($scope.params));
+  function paramsToJson(params) {
+    params = JSON.parse(JSON.stringify(params));
     for(var key in params) {
       if(key != "minimumValue") {
         params[key] = mapID(params[key]);
       }
     }
+    return params;
+  }
+
+
+  var getData = function() {
+    // Prune the param object from objects to ids
+    params = paramsToJson($scope.params);
 
     $http.get("/search/"+JSON.stringify(params))
     .then(function(response) {
@@ -126,6 +136,14 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
 
 
+  // Update location service with new Filters
+  function updateLocation() {
+    obj = btoa(JSON.stringify($scope.params));
+    $location.path(obj)
+  }
+
+
+
   // Manipulate Filters
   // Victim Alliance
   $scope.addVictimAlliance = function(item) {
@@ -133,6 +151,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimAlliance'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeVictimAlliance = function(item) {
@@ -141,6 +160,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimAlliance'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -150,6 +170,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimCorporation'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeVictimCorporation = function(item) {
@@ -158,6 +179,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimCorporation'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -167,6 +189,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimCharacter'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeVictimCharacter = function(item) {
@@ -175,6 +198,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimCharacter'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -184,6 +208,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimShipType'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeVictimShip = function(item) {
@@ -192,6 +217,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimShipType'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -201,6 +227,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimShipGroup'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeVictimGroup = function(item) {
@@ -209,6 +236,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['victimShipGroup'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -218,6 +246,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['solarSystem'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeSystem = function(item) {
@@ -226,6 +255,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['solarSystem'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -235,6 +265,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['constellation'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeConstellation = function(item) {
@@ -243,6 +274,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['constellation'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -252,6 +284,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['region'].push(item);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
   $scope.removeRegion = function(item) {
@@ -260,6 +293,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params['region'].splice(index, 1);
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   }
 
@@ -269,6 +303,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.params = JSON.parse(JSON.stringify($scope.baseParams));
       $scope.kms = [];
       getData();
+      updateLocation();
     }
   };
 
