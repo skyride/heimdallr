@@ -63,11 +63,29 @@
 
   <!-- System TypeAhead template -->
   <script type="text/ng-template" id="systemTypeaheadResult.html">
-    <a>
+    <a class="typeahead-left-icon">
+        <img class="location-icon" ng-src="https://image.eveonline.com/Type/{{match.model.sunTypeID}}_32.png">
         <div align="right" class="typeahead-sec {{$parent.$parent.$parent.$parent.sysSecClass(match.model.security)}}">{{$parent.$parent.$parent.$parent.sysSecStatus(match.model.security)}}</div>
         <strong>{{match.model.name}}</strong> &lt;
         {{match.model.constellationName}} &lt;
         {{match.model.regionName}}
+    </a>
+  </script>
+
+  <!-- Constellation TypeAhead template -->
+  <script type="text/ng-template" id="constellationTypeaheadResult.html">
+    <a class="typeahead-left-icon">
+        <img class="location-icon" ng-src="/static/img/map.png">
+        <strong>{{match.model.name}}</strong> &lt;
+        {{match.model.regionName}}
+    </a>
+  </script>
+
+  <!-- Region TypeAhead template -->
+  <script type="text/ng-template" id="regionTypeaheadResult.html">
+    <a class="typeahead-left-icon">
+        <img class="location-icon" ng-src="/static/img/map.png">
+        <strong>{{match.model.name}}</strong>
     </a>
   </script>
 
@@ -267,7 +285,7 @@
                             <input type="text" class="form-control" ng-model="systemSearch" placeholder="Search"
                               uib-typeahead="search as search.name for search in systems | filter: {'name': $viewValue} | limitTo: 10"
                               typeahead-template-url="systemTypeaheadResult.html"
-                              typeahead-on-select="addSystem($item); systemSearch = null" typeahead-min-length="2">
+                              typeahead-on-select="addSystem($item); systemSearch = null" typeahead-min-length="1">
                           </div>
                         </form>
                       </li>
@@ -275,6 +293,7 @@
                         <ul class="filter-list" ng-click="$event.stopPropagation()">
                           <li ng-click="removeSystem(item)" ng-repeat="item in params.solarSystem">
                             <span class="text-primary">
+                              <img class="dropdown-icon" ng-src="https://image.eveonline.com/Type/{{item.sunTypeID}}_32.png" />
                               {{item.name}}
                               <span class="pull-right">
                                 {{item.regionName}}
@@ -286,6 +305,60 @@
                         </ul>
                       </li>
                       <li role="separator" class="divider"></li>
+
+                      <!-- Constellation -->
+                      <li><a><strong>Constellation</strong></a></li>
+                      <li>
+                        <form class="navbar-form">
+                          <div class="form-group">
+                            <input type="text" class="form-control" ng-model="constellationSearch" placeholder="Search"
+                              uib-typeahead="search as search.name for search in constellations | filter: {'name': $viewValue} | limitTo: 10"
+                              typeahead-template-url="constellationTypeaheadResult.html"
+                              typeahead-on-select="addConstellation($item); constellationSearch = null" typeahead-min-length="1">
+                          </div>
+                        </form>
+                      </li>
+                      <li>
+                        <ul class="filter-list" ng-click="$event.stopPropagation()">
+                          <li ng-click="removeConstellation(item)" ng-repeat="item in params.constellation">
+                            <span class="text-primary">
+                              <img class="dropdown-icon" ng-src="/static/img/map.png" />
+                              {{item.name}}
+                              <span class="pull-right">
+                                {{item.regionName}}
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li role="separator" class="divider"></li>
+
+                      <!-- Region -->
+                      <li><a><strong>Region</strong></a></li>
+                      <li>
+                        <form class="navbar-form">
+                          <div class="form-group">
+                            <input type="text" class="form-control" ng-model="regionSearch" placeholder="Search"
+                              uib-typeahead="search as search.name for search in regions | filter: {'name': $viewValue} | limitTo: 10"
+                              typeahead-template-url="regionTypeaheadResult.html"
+                              typeahead-on-select="addRegion($item); regionSearch = null" typeahead-min-length="1">
+                          </div>
+                        </form>
+                      </li>
+                      <li>
+                        <ul class="filter-list" ng-click="$event.stopPropagation()">
+                          <li ng-click="removeRegion(item)" ng-repeat="item in params.region">
+                            <span class="text-primary">
+                              <img class="dropdown-icon" ng-src="/static/img/map.png" />
+                              {{item.name}}
+                              <span class="pull-right">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
                     </ul>
                   </li>
                 </li>

@@ -16,7 +16,8 @@ def systems():
     rows = sde.query("SELECT solarSystemID as `id`, solarSystemName as `name`, \
                       mapConstellations.constellationName as `constellationName`, \
                       mapRegions.regionName as `regionName`, \
-                      ROUND(mapSolarSystems.security, 3) as `security` \
+                      ROUND(mapSolarSystems.security, 3) as `security`, \
+                      mapSolarSystems.sunTypeID as `sunTypeID` \
                       FROM mapSolarSystems \
                       INNER JOIN mapConstellations ON mapConstellations.constellationID = mapSolarSystems.constellationID \
                       INNER JOIN mapRegions ON mapRegions.regionID = mapConstellations.regionID")

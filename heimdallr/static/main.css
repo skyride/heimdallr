@@ -9,6 +9,17 @@
   border-radius: 3px;
 }
 
+.location-icon {
+  border-radius: 3px;
+  float: left;
+  width: 24px;
+  height: 24px;
+}
+
+.typeahead-left-icon {
+  padding-left: 5px !important;
+}
+
 .dropdown-menu input.form-control {
   min-width: 250px;
 }

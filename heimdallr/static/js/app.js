@@ -229,6 +229,40 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
+  // Constellation
+  $scope.addConstellation = function(item) {
+    if(mapID($scope.params['constellation']).indexOf(item.id) < 0) {
+      $scope.params['constellation'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeConstellation = function(item) {
+    if(mapID($scope.params['constellation']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['constellation']).indexOf(item.id);
+      $scope.params['constellation'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
+  // Region
+  $scope.addRegion = function(item) {
+    if(mapID($scope.params['region']).indexOf(item.id) < 0) {
+      $scope.params['region'].push(item);
+      $scope.kms = [];
+      getData();
+    }
+  };
+  $scope.removeRegion = function(item) {
+    if(mapID($scope.params['region']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['region']).indexOf(item.id);
+      $scope.params['region'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+    }
+  }
+
 
   $scope.resetFilters = function() {
     if(JSON.stringify($scope.params) !== JSON.stringify($scope.baseParams)) {
