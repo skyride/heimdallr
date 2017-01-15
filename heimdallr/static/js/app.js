@@ -33,6 +33,8 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   $scope.ships = [];
   $scope.groups = [];
   $scope.systems = [];
+  $scope.constellations = [];
+  $scope.regions = [];
 
   $http.get("/autocomplete/ships")
   .then(function(response) {
@@ -44,9 +46,19 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     $scope.groups = response.data;
   });
 
-  $http.get("/autocomplete/systems")
+  $http.get("/map/systems")
   .then(function(response) {
     $scope.systems = response.data;
+  });
+
+  $http.get("/map/constellations")
+  .then(function(response) {
+    $scope.constellations = response.data;
+  });
+
+  $http.get("/map/regions")
+  .then(function(response) {
+    $scope.regions = response.data;
   });
 
 

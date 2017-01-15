@@ -86,13 +86,13 @@ def ships():
     return Response(response=rows.export('json'), status=200, mimetype="application/json")
 
 
-# Returns all ships for local autocomplete
+# Returns all ship/structure groups for local autocomplete
 @app.route("/autocomplete/groups", methods=['GET'])
 def groups():
     # Get sde connection from factory
     sde = sdeFactory()
 
-    # Query for ships
+    # Query for groups
     rows = sde.query("SELECT groupID as `id`, categoryID, groupName as `name` \
                       FROM invGroups \
                       WHERE categoryID IN (6, 22, 23, 87, 65) \
