@@ -31,7 +31,10 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   // Take the URL params if there are any
   if($location.path().length > 1) {
-    $scope.params = JSON.parse(atob($location.path().slice(1)))
+    params = JSON.parse(atob($location.path().slice(1)))
+    for(var key in params) {
+      $scope.params[key] = params[key];
+    }
   }
 
   // Static data for autocompletion
@@ -68,12 +71,32 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   function paramsToJson(params) {
     params = JSON.parse(JSON.stringify(params));
+    ret = {}
     for(var key in params) {
       if(key != "minimumValue") {
-        params[key] = mapID(params[key]);
+        if(params[key].length > 0) {
+          ret[key] = mapID(params[key]);
+        }
+      } else if (params[key] > 0) {
+        ret[key] = params[key];
       }
     }
-    return params;
+    return ret;
+  }
+
+  function paramsToBase64(params) {
+    params = JSON.parse(JSON.stringify(params));
+    ret = {}
+    for(var key in params) {
+      if(key != "minimumValue") {
+        if(params[key].length > 0) {
+          ret[key] = params[key];
+        }
+      } else if (params[key] > 0) {
+        ret[key] = params[key];
+      }
+    }
+    return ret;
   }
 
 
@@ -138,7 +161,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   // Update location service with new Filters
   function updateLocation() {
-    obj = btoa(JSON.stringify($scope.params));
+    obj = btoa(JSON.stringify(paramsToBase64($scope.params)));
     $location.path(obj)
   }
 
