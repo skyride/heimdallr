@@ -46,6 +46,8 @@ def search(params):
     # $or accumulators
     victimObj = []
     victimShipObj = []
+    attackerObj = []
+    attackerShipObj = []
     locationObj = []
 
     # victimCharacter
@@ -86,17 +88,37 @@ def search(params):
     # attackerCharacter
     if "attackerCharacter" in params:
         if len(params['attackerCharacter']) > 0:
-            search['killmail.attackers.character.id'] = {"$in": list(params['attackerCharacter'])}
+            attackerObj.append({
+                'killmail.attackers.character.id': {"$in": list(params['attackerCharacter'])}
+            })
 
     # attackerCorporation
     if "attackerCorporation" in params:
         if len(params['attackerCorporation']) > 0:
-            search['killmail.attackers.corporation.id'] = {"$in": list(params['attackerCorporation'])}
+            attackerObj.append({
+                'killmail.attackers.corporation.id': {"$in": list(params['attackerCorporation'])}
+            })
 
     # attackerAlliance
     if "attackerAlliance" in params:
         if len(params['attackerAlliance']) > 0:
-            search['killmail.attackers.alliance.id'] = {"$in": list(params['attackerAlliance'])}
+            attackerObj.append({
+                'killmail.attackers.alliance.id': {"$in": list(params['attackerAlliance'])}
+            })
+
+    # attackerShipType
+    if "attackerShipType" in params:
+        if len(params['attackerShipType']) > 0:
+            attackerShipObj.append({
+                'killmail.attackers.shipType.id': {"$in": list(params['attackerShipType'])},
+            })
+
+    # attackerShipGroup
+    if "attackerShipGroup" in params:
+        if len(params['attackerShipGroup']) > 0:
+            attackerShipObj.append({
+                'killmail.attackers.shipGroup.id': {"$in": list(params['attackerShipGroup'])},
+            })
 
     # carrying
     if "carrying" in params:
@@ -139,6 +161,14 @@ def search(params):
         victimShipObj = { "$or": victimShipObj }
         searchObj["$and"].append(victimShipObj)
 
+    if len(attackerObj) > 0:
+        attackerObj = { "$or": attackerObj }
+        searchObj["$and"].append(attackerObj)
+
+    if len(attackerShipObj) > 0:
+        attackerShipObj = { "$or": attackerShipObj }
+        searchObj["$and"].append(attackerShipObj)
+
     if len(locationObj) > 0:
         locationObj = { "$or": locationObj }
         searchObj["$and"].append(locationObj)
@@ -157,7 +187,6 @@ def search(params):
         sort = [("_id", -1)]
     else:
         sort = [("killmail.killTime", -1)]
-        #sort = [("_id", -1)]
 
 
     # Perform search and return result if there are any kills provided

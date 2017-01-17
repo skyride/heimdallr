@@ -263,6 +263,101 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     }
   }
 
+  // Attacker Alliance
+  $scope.addAttackerAlliance = function(item) {
+    if(mapID($scope.params['attackerAlliance']).indexOf(item.id) < 0) {
+      $scope.params['attackerAlliance'].push(item);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  };
+  $scope.removeAttackerAlliance = function(item) {
+    if(mapID($scope.params['attackerAlliance']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['attackerAlliance']).indexOf(item.id);
+      $scope.params['attackerAlliance'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  }
+
+  // Attacker Corporation
+  $scope.addAttackerCorporation = function(item) {
+    if(mapID($scope.params['attackerCorporation']).indexOf(item.id) < 0) {
+      $scope.params['attackerCorporation'].push(item);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  };
+  $scope.removeAttackerCorporation = function(item) {
+    if(mapID($scope.params['attackerCorporation']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['attackerCorporation']).indexOf(item.id);
+      $scope.params['attackerCorporation'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  }
+
+  // Attacker Character
+  $scope.addAttackerCharacter = function(item) {
+    if(mapID($scope.params['attackerCharacter']).indexOf(item.id) < 0) {
+      $scope.params['attackerCharacter'].push(item);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  };
+  $scope.removeAttackerCharacter = function(item) {
+    if(mapID($scope.params['attackerCharacter']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['attackerCharacter']).indexOf(item.id);
+      $scope.params['attackerCharacter'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  }
+
+  // Attacker Ship
+  $scope.addAttackerShip = function(item) {
+    if(mapID($scope.params['attackerShipType']).indexOf(item.id) < 0) {
+      $scope.params['attackerShipType'].push(item);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  };
+  $scope.removeAttackerShip = function(item) {
+    if(mapID($scope.params['attackerShipType']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['attackerShipType']).indexOf(item.id);
+      $scope.params['attackerShipType'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  }
+
+  // Attacker Group
+  $scope.addAttackerGroup = function(item) {
+    if(mapID($scope.params['attackerShipGroup']).indexOf(item.id) < 0) {
+      $scope.params['attackerShipGroup'].push(item);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  };
+  $scope.removeAttackerGroup = function(item) {
+    if(mapID($scope.params['attackerShipGroup']).indexOf(item.id) > -1) {
+      index = mapID($scope.params['attackerShipGroup']).indexOf(item.id);
+      $scope.params['attackerShipGroup'].splice(index, 1);
+      $scope.kms = [];
+      getData();
+      updateLocation();
+    }
+  }
+
   // System
   $scope.addSystem = function(item) {
     if(mapID($scope.params['solarSystem']).indexOf(item.id) < 0) {
