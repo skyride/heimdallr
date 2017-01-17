@@ -104,7 +104,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     // Prune the param object from objects to ids
     params = paramsToJson($scope.params);
 
-    $http.get("/search/"+JSON.stringify(params))
+    $http.get("/search/"+btoa(JSON.stringify(params)))
     .then(function(response) {
       //$scope.kms = response.data;
       //Iterate through the response data and add them if they're new

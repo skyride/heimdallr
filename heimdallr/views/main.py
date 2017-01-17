@@ -2,6 +2,8 @@ from flask import Response
 from pymongo import errors
 from bson.json_util import loads, dumps
 
+import base64
+
 from heimdallr import app
 from heimdallr.db import db
 from heimdallr.views import projections
@@ -28,6 +30,7 @@ def kill(killID):
 def search(params):
     # Starting values
     search = {}
+    params = base64.b64decode(params)
 
     # Decode the search params
     try:
@@ -155,8 +158,6 @@ def search(params):
     else:
         sort = [("killmail.killTime", -1)]
         #sort = [("_id", -1)]
-
-    print dumps(searchObj)
 
 
     # Perform search and return result if there are any kills provided
