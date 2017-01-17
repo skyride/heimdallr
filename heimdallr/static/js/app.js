@@ -426,7 +426,10 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   };
 
 
+
+
   // Click functions
+  // Add Victim
   $scope.addVictim = function(item) {
     // Check if we have an alliance, otherwise just use the corporation
     if("alliance" in item.killmail.victim) {
@@ -435,6 +438,18 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       $scope.addVictimCorporation(item.killmail.victim.corporation);
     }
   }
+
+  // Add Attacker
+  $scope.addAttacker = function(item) {
+    // Check if we have an alliance, otherwise just use the corporation
+    if("alliance" in item.killmail.finalBlow) {
+      $scope.addAttackerAlliance(item.killmail.finalBlow.alliance);
+    } else {
+      $scope.addAttackerCorporation(item.killmail.finalBlow.corporation);
+    }
+  }
+
+
 
 
   // Display functions
