@@ -452,6 +452,30 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
 
 
+  // Lookup functions
+  // System
+  $scope.getSystem = function(id) {
+    for(var i = 0; i < $scope.systems.length; i++) {
+      if($scope.systems[i].id == id) {
+        return $scope.systems[i];
+      }
+    }
+    return null;
+  }
+
+  // Region
+  $scope.getRegion = function(id) {
+    for(var i = 0; i < $scope.regions.length; i++) {
+      if($scope.regions[i].id == id) {
+        return $scope.regions[i];
+      }
+    }
+    return null;
+  }
+
+
+
+
   // Display functions
   $scope.iskFormat = function(isk) {
     return numeral(isk).format('0,0.00a');

@@ -137,7 +137,11 @@
               <ul class="nav navbar-nav">
                 <!-- Victim -->
                 <li class="dropdown">
-                  <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Victim <span class="caret"></span></a>
+                  <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Victim
+                    ({{ params.victimAlliance.length + params.victimCorporation.length + params.victimCharacter.length + params.victimShipGroup.length + params.victimShipType.length }})
+                    <span class="caret"></span>
+                  </a>
                   <ul class="dropdown-menu">
                     <!-- Alliance -->
                     <li><a><strong>Alliance</strong></a></li>
@@ -275,7 +279,11 @@
 
                   <!-- Attacker -->
                   <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Attacker <span class="caret"></span></a>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                      Attacker
+                      ({{ params.attackerAlliance.length + params.attackerCorporation.length + params.attackerCharacter.length + params.attackerShipGroup.length + params.attackerShipType.length }})
+                      <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
                       <!-- Alliance -->
                       <li><a><strong>Alliance</strong></a></li>
@@ -414,7 +422,11 @@
 
                 <!-- Location -->
                 <li class="dropdown">
-                  <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Location <span class="caret"></span></a>
+                  <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Location
+                    ({{ params.solarSystem.length + params.constellation.length + params.region.length }})
+                    <span class="caret"></span>
+                  </a>
                   <ul class="dropdown-menu">
                     <!-- System -->
                     <li><a><strong>System</strong></a></li>
@@ -537,7 +549,7 @@
                 <!-- System and Region info -->
                 <td><div>
                   <p class="systemp">
-                    {{k.killmail.solarSystem.name}}
+                    <a href="" ng-click="addSystem(getSystem(k.killmail.solarSystem.id))">{{k.killmail.solarSystem.name}}</a>
                     <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span>
                     <br />{{k.killmail.region.name}}
                   </p>
