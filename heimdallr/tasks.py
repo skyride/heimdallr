@@ -6,7 +6,7 @@ import re
 from bson.json_util import loads, dumps
 from celery import Celery
 
-from heimdallr.db import db, sdeFactory
+from db import db, sdeFactory
 
 app = Celery('evething', backend='redis://127.0.0.1/', broker='redis://127.0.0.1/')
 
