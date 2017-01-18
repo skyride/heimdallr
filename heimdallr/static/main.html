@@ -550,8 +550,8 @@
                 <td><div>
                   <p class="systemp">
                     <a href="" ng-click="addSystem(getSystem(k.killmail.solarSystem.id))">{{k.killmail.solarSystem.name}}</a>
-                    <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span>
-                    <br />{{k.killmail.region.name}}
+                    <span class="{{sysSecClass(k.killmail.solarSystem.securityStatus)}}">{{sysSecStatus(k.killmail.solarSystem.securityStatus)}}</span><br />
+                    <a href="" ng-click="addRegion(getRegion(k.killmail.region.id))">{{k.killmail.region.name}}</a>
                   </p>
                 </div></td>
 
@@ -565,8 +565,15 @@
                 <!-- Victim info -->
                 <td><div>
                   <p>
-                    <span class="hidden-xs">{{victimName(k)}} ({{k.killmail.victim.shipType.name}})<br /></span>
-                    {{victimGuild(k)}} <span class="visible-xs">({{k.killmail.victim.shipType.name}})</span>
+                    <span class="hidden-xs">
+                      <!--<a href="" ng-click="addVictim(k)">-->{{victimName(k)}}<!--</a>-->
+                      (<a href="" ng-click="addVictimShip(getShipType(k.killmail.victim.shipType.id))">{{k.killmail.victim.shipType.name}}</a>)
+                      <br />
+                    </span>
+                    {{victimGuild(k)}}
+                    <span class="visible-xs">
+                      (<a href="" ng-click="addVictimShip(getShipType(k.killmail.victim.shipType.id))">{{k.killmail.victim.shipType.name}}</a>)
+                    </span>
                   </p>
                 </div></td>
 

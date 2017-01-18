@@ -69,6 +69,22 @@ def character(search):
     return Response(response=dumps(r), status=200, mimetype="application/json")
 
 
+# Returns autocomplete results for item types
+@app.route("/autocomplete/type/<string:search>", methods=['GET'])
+def types(search):
+    # Get sde connection from factory
+    sde = sdeFactory()
+
+    # Query for types
+    rows = sde.query("SELECT typeID as `id`, typeName as `name`, groupID \
+                      FROM invTypes \
+                      WHERE published = 1 \
+                      AND typeName LIKE :search \
+                      ORDER BY mass DESC, groupID, typeName", search="%%%s%%" % search)
+
+    return Response(response=rows.export('json'), status=200, mimetype="application/json")
+
+
 # Returns all ships for local autocomplete
 @app.route("/autocomplete/ships", methods=['GET'])
 def ships():

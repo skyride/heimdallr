@@ -473,6 +473,16 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
     return null;
   }
 
+  // Ship Type
+  $scope.getShipType = function(id) {
+    for(var i = 0; i < $scope.ships.length; i++) {
+      if($scope.ships[i].id == id) {
+        return $scope.ships[i];
+      }
+    }
+    return null;
+  }
+
 
 
 
