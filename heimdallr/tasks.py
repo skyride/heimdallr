@@ -7,6 +7,7 @@ from bson.json_util import loads, dumps
 from celery import Celery
 
 from db import db, sdeFactory
+sde = sdeFactory()
 
 app = Celery('evething', backend='redis://127.0.0.1/', broker='redis://127.0.0.1/')
 
