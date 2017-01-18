@@ -1,0 +1,7 @@
+heimdallr/main.py
+heimdallr/scraper.py
+heimdallr.egg-info/PKG-INFO
+heimdallr.egg-info/SOURCES.txt
+heimdallr.egg-info/dependency_links.txt
+heimdallr.egg-info/requires.txt
+heimdallr.egg-info/top_level.txt
