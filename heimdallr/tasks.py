@@ -156,7 +156,7 @@ def insertKm(data):
     try:
         # Add map data
         mapData = getMapData(data['killmail']['solarSystem']['id'])
-        data.update(mapData)
+        data['killmail'].update(mapData)
 
         # Put the final blow attacker as its own thing on the killmail
         for attacker in data['killmail']['attackers']:
