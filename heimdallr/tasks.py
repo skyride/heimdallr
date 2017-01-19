@@ -155,7 +155,7 @@ def insertCharacter(id):
 def insertKm(data):
     try:
         # Add map data
-        mapData = getMapData(data['killmail']['solarSystem']['solarSystemID'])
+        mapData = getMapData(data['killmail']['solarSystem']['id'])
         data.update(mapData)
 
         # Put the final blow attacker as its own thing on the killmail
