@@ -42,6 +42,37 @@ def getGroupObj(typeID):
     return loads(rows.export('json'))[0]
 
 
+# Returns a dictionary with the system, constellation and region objects for the called system
+def getMapData(solarSystemID):
+    rows = sde.query("SELECT mapSolarSystems.solarSystemID, mapSolarSystems.solarSystemName, ROUND(mapSolarSystems.security, 3) as `security`, \
+                        mapConstellations.constellationID, mapConstellations.constellationName, \
+                        mapRegions.regionID, mapRegions.regionName \
+                      FROM mapSolarSystems \
+                      INNER JOIN mapConstellations ON mapConstellations.constellationID = mapSolarSystems.constellationID \
+                      INNER JOIN mapRegions on mapRegions.regionID = mapConstellations.regionID \
+                      WHERE mapSolarSystems.solarSystemID = :solarSystemID", solarSystemID=solarSystemID)
+    row = rows[0]
+
+    # Build return object
+    ret = {
+        "solarSystem": {
+            "id": row['solarSystemID'],
+            "securityStatus": row['security'],
+            "name": row['solarSystemName'],
+        },
+        "constellation": {
+            "id": row['constellationID'],
+            "name": row['constellationName'],
+        },
+        "region": {
+            "id": row['regionID'],
+            "name": row['regionName'],
+        }
+    }
+
+    return ret
+
+
 # Insert an alliance
 @app.task
 def insertAlliance(id):
@@ -123,23 +154,9 @@ def insertCharacter(id):
 @app.task
 def insertKm(data):
     try:
-        # Add constellation and region
-        sysurl = "https://crest-tq.eveonline.com/solarsystems/%s/" % (data['killmail']['solarSystem']['id'])
-        system = json.loads(requests.get(url=sysurl).text)
-        constellation = json.loads(requests.get(url=system['constellation']['href']).text)
-        region = json.loads(requests.get(url=constellation['region']['href']).text)
-
-        data['killmail']['solarSystem']['securityStatus'] = system['securityStatus']
-
-        data['killmail']['constellation'] = {
-            "id": system['constellation']['id'],
-            "name": constellation['name'],
-        }
-
-        data['killmail']['region'] = {
-            "id": region['id'],
-            "name": region['name'],
-        }
+        # Add map data
+        mapData = getMapData(data['killmail']['solarSystem']['solarSystemID'])
+        data.update(mapData)
 
         # Put the final blow attacker as its own thing on the killmail
         for attacker in data['killmail']['attackers']:
