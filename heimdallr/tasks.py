@@ -33,9 +33,6 @@ def prune(obj):
 
 
 def getGroupObj(typeID):
-    # Get sde connection from factory
-    sde = sdeFactory()
-
     # Query for the group based on the typeID
     rows = sde.query("SELECT invGroups.groupID as `id`, groupName as `name`, categoryID \
                       FROM invTypes \

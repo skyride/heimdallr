@@ -1,1 +1,1 @@
-celery -A tasks worker --loglevel=info --concurrency=32
+celery -A tasks worker --loglevel=info --concurrency=5
