@@ -31,7 +31,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   // Take the URL params if there are any
   if($location.path().length > 1) {
-    params = JSON.parse(atob($location.path().slice(1)))
+    params = JSON.parse(atob($location.path().slice(1)));
     for(var key in params) {
       $scope.params[key] = params[key];
     }
@@ -71,7 +71,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   function paramsToJson(params) {
     params = JSON.parse(JSON.stringify(params));
-    ret = {}
+    ret = {};
     for(var key in params) {
       if(key != "minimumValue") {
         if(params[key].length > 0) {
@@ -86,7 +86,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
 
   function paramsToBase64(params) {
     params = JSON.parse(JSON.stringify(params));
-    ret = {}
+    ret = {};
     for(var key in params) {
       if(key != "minimumValue") {
         if(params[key].length > 0) {
@@ -115,9 +115,9 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
             found = true;
           }
         }
-        if(found == false) {
+        if(found === false) {
           // Push the new object on to the km queue
-          response.data[i].killmail.killTime = Date.parse(response.data[i].killmail.killTime)
+          response.data[i].killmail.killTime = Date.parse(response.data[i].killmail.killTime);
           $scope.kms.push(response.data[i]);
 
           // If it's getting too large let's cull an object to avoid memory leaks
@@ -127,7 +127,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
         }
       }
     });
-  }
+  };
 
   getData();
   $interval(function() {
@@ -162,7 +162,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
   // Update location service with new Filters
   function updateLocation() {
     obj = btoa(JSON.stringify(paramsToBase64($scope.params)));
-    $location.path(obj)
+    $location.path(obj);
   }
 
 
@@ -185,7 +185,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Victim Corporation
   $scope.addVictimCorporation = function(item) {
@@ -204,7 +204,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Victim Character
   $scope.addVictimCharacter = function(item) {
@@ -223,7 +223,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Victim Ship
   $scope.addVictimShip = function(item) {
@@ -242,7 +242,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Victim Group
   $scope.addVictimGroup = function(item) {
@@ -261,7 +261,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Attacker Alliance
   $scope.addAttackerAlliance = function(item) {
@@ -280,7 +280,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Attacker Corporation
   $scope.addAttackerCorporation = function(item) {
@@ -299,7 +299,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Attacker Character
   $scope.addAttackerCharacter = function(item) {
@@ -318,7 +318,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Attacker Ship
   $scope.addAttackerShip = function(item) {
@@ -337,7 +337,7 @@ heimdallrApp.controller('KillsController', function KillsController($scope, $htt
       getData();
       updateLocation();
     }
-  }
+  };
 
   // Attacker Group
   $scope.addAttackerGroup = function(item) {
